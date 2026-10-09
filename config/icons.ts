@@ -1,7 +1,7 @@
-import type { LucideProps } from "lucide-react";
+import type { CentralIconBaseProps } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 
-/** Default props for icons on the site. */
-export const defaultIconProps: LucideProps = { width: "0.75em", height: "0.75em", strokeWidth: 1 };
+/** Default props for icons on the site, whose lines stay 1px at any size. */
+export const defaultIconProps: CentralIconBaseProps = { size: "0.75em", strokeWidth: 1 };
 
 /** Default props for icons in the Studio. */
-export const defaultSanityIconProps: LucideProps = { width: "1em", height: "1em", strokeWidth: 1.5 };
+export const defaultSanityIconProps: CentralIconBaseProps = { size: "1em", strokeWidth: 1.5 };

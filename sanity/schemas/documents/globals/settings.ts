@@ -1,4 +1,4 @@
-import { ToggleLeftIcon } from "lucide-react";
+import { IconSettingsToggle1 } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { defineField, defineType } from "sanity";
 import type { SanityDocument } from "sanity";
 
@@ -24,7 +24,7 @@ export const settings = defineType({
   name: "settings" satisfies SanitySettings["_type"],
   type: "document",
   title: "Settings",
-  icon: createSanityIcon(ToggleLeftIcon),
+  icon: createSanityIcon(IconSettingsToggle1),
   description: "Site-wide SEO values for pages that don't set their own.",
   groups: defineDocumentGroups({ defaultGroup: "seo" }),
   preview: {

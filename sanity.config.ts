@@ -7,6 +7,7 @@ import { structureTool } from "sanity/structure";
 
 import { routes } from "@/config/routes";
 import { objectKeys } from "@/lib/utils";
+import { WorkspaceIcon } from "@/sanity/components/workspace-icon";
 import { documents, lockedDocumentTypes } from "@/sanity/config/documents";
 import { types } from "@/sanity/config/types";
 import { dataset, draftApiUrl, projectId, studioUrl } from "@/sanity/lib/api";
@@ -18,8 +19,9 @@ export default defineConfig({
   projectId,
   dataset,
   basePath: studioUrl,
-  name: "cairn",
-  title: "Cairn",
+  name: "kenny-heard",
+  title: "Kenny Heard",
+  icon: WorkspaceIcon,
   schema: {
     types: [...documents, ...types],
   },

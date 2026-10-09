@@ -1,5 +1,5 @@
+import { IconCursorClick } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { SanityLink } from "@driftime/sanity-plugin-link/render";
-import { SquareMousePointerIcon } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
 import type { ButtonProps } from "@/components/button";
@@ -16,7 +16,7 @@ export interface SanityButton {
 export const button = defineType({
   name: "button" satisfies SanityButton["_type"],
   type: "object",
-  icon: createSanityIcon(SquareMousePointerIcon),
+  icon: createSanityIcon(IconCursorClick),
   description: "Button linking to a page, file, or another site.",
   preview: {
     select: {

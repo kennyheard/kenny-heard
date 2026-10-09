@@ -1,7 +1,7 @@
-import type { LucideIcon } from "lucide-react";
 import type { FieldGroupDefinition } from "sanity";
 
 import { createSanityIcon } from "@/lib/icons";
+import type { CentralIcon } from "@/lib/icons";
 import { convertCase, objectEntries } from "@/lib/utils";
 
 /** Field group tab in the document editor. */
@@ -9,7 +9,7 @@ export interface DocumentGroupDefinition {
   /** Tab title, or undefined to title-case the group name. */
   title?: string;
   /** Icon shown on the tab. */
-  icon: LucideIcon;
+  icon: CentralIcon;
 }
 
 /** Field group tabs keyed by name. */

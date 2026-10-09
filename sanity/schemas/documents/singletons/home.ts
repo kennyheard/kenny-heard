@@ -1,4 +1,4 @@
-import { HouseIcon } from "lucide-react";
+import { IconHome } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { defineField, defineType } from "sanity";
 import type { SanityDocument } from "sanity";
 
@@ -26,7 +26,7 @@ export const home = defineType({
   name: "home" satisfies SanityHome["_type"],
   type: "document",
   title: "Home",
-  icon: createSanityIcon(HouseIcon),
+  icon: createSanityIcon(IconHome),
   description: "Landing page of the site.",
   groups: defineDocumentGroups({ defaultGroup: "properties" }),
   preview: {

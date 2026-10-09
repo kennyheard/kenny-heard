@@ -1,5 +1,5 @@
+import { IconParagraph } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { PortableTextLinkPlugins, linkAnnotation } from "@driftime/sanity-plugin-link";
-import { TextInitialIcon } from "lucide-react";
 import { defineArrayMember, defineType } from "sanity";
 import type { ArrayDefinition, ArrayOptions, PortableTextTextBlock } from "sanity";
 
@@ -25,7 +25,7 @@ export type SanityMinimalPortableText = SanityKeyedArray<PortableTextTextBlock>;
 export const minimalPortableText = defineType({
   name: "minimalPortableText",
   type: "array",
-  icon: createSanityIcon(TextInitialIcon),
+  icon: createSanityIcon(IconParagraph),
   description: "Rich text limited to bold, italic, and links.",
   components: {
     input: MinimalPortableText,

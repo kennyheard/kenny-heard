@@ -1,4 +1,4 @@
-import { PilcrowIcon } from "lucide-react";
+import { IconParagraph } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { defineArrayMember, defineField } from "sanity";
 import type { PortableTextObject } from "sanity";
 
@@ -16,7 +16,7 @@ export const textBlock = defineArrayMember({
   name: "textBlock" satisfies SanityTextBlock["_type"],
   type: "object",
   title: "Text",
-  icon: createSanityIcon(PilcrowIcon),
+  icon: createSanityIcon(IconParagraph),
   description: "Heading and formatted text.",
   preview: {
     select: {

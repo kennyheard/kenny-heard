@@ -1,7 +1,7 @@
 "use client";
 
+import { IconArrowDown, IconArrowInbox, IconArrowUpRight } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { SanityLink } from "@driftime/sanity-plugin-link/render";
-import { ArrowDownIcon, ArrowUpRightIcon, DownloadIcon } from "lucide-react";
 import NextLink from "next/link";
 import { Link as ReactAriaLink, composeRenderProps } from "react-aria-components";
 import type { LinkProps as ReactAriaLinkProps } from "react-aria-components";
@@ -100,9 +100,9 @@ export function Link({
 
   const Icon = (() => {
     if (isButton || isLinkBlock) return undefined;
-    if (isExternalLink) return ArrowUpRightIcon;
-    if (isDownloadLink) return DownloadIcon;
-    if (hasAnchor) return ArrowDownIcon;
+    if (isExternalLink) return IconArrowUpRight;
+    if (isDownloadLink) return IconArrowInbox;
+    if (hasAnchor) return IconArrowDown;
 
     return undefined;
   })();

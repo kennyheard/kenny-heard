@@ -1,4 +1,4 @@
-import { CompassIcon } from "lucide-react";
+import { IconCompassRound } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { defineField, defineType } from "sanity";
 import type { SanityDocument } from "sanity";
 
@@ -20,7 +20,7 @@ export const navigation = defineType({
   name: "navigation" satisfies SanityNavigation["_type"],
   type: "document",
   title: "Navigation",
-  icon: createSanityIcon(CompassIcon),
+  icon: createSanityIcon(IconCompassRound),
   description: "Navigation menus shown across the site.",
   groups: defineDocumentGroups({ defaultGroup: "header" }),
   preview: {

@@ -1,5 +1,5 @@
+import { IconCompassRound } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { SanityLink } from "@driftime/sanity-plugin-link/render";
-import { CompassIcon } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { createSanityIcon } from "@/lib/icons";
@@ -14,7 +14,7 @@ export interface SanityNavigationMenu {
 export const navigationMenu = defineType({
   name: "navigationMenu" satisfies SanityNavigationMenu["_type"],
   type: "object",
-  icon: createSanityIcon(CompassIcon),
+  icon: createSanityIcon(IconCompassRound),
   description: "Set of navigation links.",
   preview: {
     select: {

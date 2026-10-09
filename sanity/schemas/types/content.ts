@@ -1,4 +1,4 @@
-import { BlocksIcon } from "lucide-react";
+import { IconBlocks } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { defineType } from "sanity";
 
 import { createSanityIcon } from "@/lib/icons";
@@ -13,7 +13,7 @@ export type SanityContent = SanityKeyedArray<SanityAnyBlock>;
 export const content = defineType({
   name: "content",
   type: "array",
-  icon: createSanityIcon(BlocksIcon),
+  icon: createSanityIcon(IconBlocks),
   description: "Content blocks, shown in order from top to bottom.",
   of: [textBlock],
 });

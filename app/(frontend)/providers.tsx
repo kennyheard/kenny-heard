@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
 import { RouterProvider } from "react-aria-components";
 
@@ -17,7 +16,7 @@ export interface ProvidersProps {
 }
 
 /**
- * Gives everything inside it client-side navigation for React Aria links and URL state.
+ * Gives everything inside it client-side navigation for React Aria links.
  *
  * @returns The providers wrapping the page.
  */
@@ -30,7 +29,7 @@ export function Providers({ children }: ProvidersProps) {
         router.push(path, options);
       }}
     >
-      <NuqsAdapter>{children}</NuqsAdapter>
+      {children}
     </RouterProvider>
   );
 }

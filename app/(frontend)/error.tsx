@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeIcon, RotateCcwIcon } from "lucide-react";
+import { IconArrowRotateClockwise, IconHome } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { useEffect } from "react";
 
 import { Button } from "@/components/button";
@@ -26,11 +26,11 @@ export default function Error({ error, unstable_retry }: ErrorProps) {
         <p>This page couldn’t be loaded. Try again, or go back to the home page.</p>
         <div className="flex flex-wrap gap-2">
           <Button onPress={unstable_retry}>
-            <RotateCcwIcon {...defaultIconProps} />
+            <IconArrowRotateClockwise {...defaultIconProps} />
             Try again
           </Button>
           <Link as="button" href="/">
-            <HomeIcon {...defaultIconProps} />
+            <IconHome {...defaultIconProps} />
             Go home
           </Link>
         </div>

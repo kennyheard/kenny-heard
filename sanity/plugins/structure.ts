@@ -1,4 +1,4 @@
-import { ShapesIcon } from "lucide-react";
+import { IconShapesPlusXSquareCircle } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { DocumentDefinition } from "sanity";
 import type { StructureResolver } from "sanity/structure";
 
@@ -71,7 +71,7 @@ export function structure(...[structureBuilder]: Parameters<StructureResolver>) 
     return listItem()
       .id(id)
       .title(title ?? convertCase(id, "title"))
-      .icon(icon ?? createSanityIcon(ShapesIcon))
+      .icon(icon ?? createSanityIcon(IconShapesPlusXSquareCircle))
       .child(
         list()
           .title(title ?? convertCase(id, "title"))

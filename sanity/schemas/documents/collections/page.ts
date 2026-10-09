@@ -1,4 +1,4 @@
-import { FileIcon } from "lucide-react";
+import { IconFileText } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { defineField, defineType } from "sanity";
 import type { SanityDocument } from "sanity";
 
@@ -28,7 +28,7 @@ export const page = defineType({
   name: "page" satisfies SanityPage["_type"],
   type: "document",
   title: "Pages",
-  icon: createSanityIcon(FileIcon),
+  icon: createSanityIcon(IconFileText),
   description: "General-purpose pages.",
   groups: defineDocumentGroups({ defaultGroup: "properties" }),
   preview: {

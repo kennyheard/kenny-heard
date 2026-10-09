@@ -1,5 +1,5 @@
+import { IconParagraph } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { PortableTextLinkPlugins, linkAnnotation } from "@driftime/sanity-plugin-link";
-import { TextInitialIcon } from "lucide-react";
 import { defineArrayMember, defineType } from "sanity";
 import type { PortableTextTextBlock } from "sanity";
 
@@ -12,7 +12,7 @@ export type SanityStandardPortableText = SanityKeyedArray<PortableTextTextBlock>
 export const standardPortableText = defineType({
   name: "standardPortableText",
   type: "array",
-  icon: createSanityIcon(TextInitialIcon),
+  icon: createSanityIcon(IconParagraph),
   description: "Rich text with formatting, lists, and links.",
   components: {
     portableText: {

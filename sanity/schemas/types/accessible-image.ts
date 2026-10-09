@@ -1,4 +1,4 @@
-import { ImageIcon } from "lucide-react";
+import { IconImages1 } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { ReactNode } from "react";
 import { defineField, defineType } from "sanity";
 
@@ -15,7 +15,7 @@ export const accessibleImage = defineType({
   name: "accessibleImage" satisfies SanityAccessibleImage["_type"],
   type: "image",
   title: "Image",
-  icon: createSanityIcon(ImageIcon),
+  icon: createSanityIcon(IconImages1),
   description: "Image with alternative text and an optional caption. Upload a PNG or JPEG.",
   preview: {
     select: {
