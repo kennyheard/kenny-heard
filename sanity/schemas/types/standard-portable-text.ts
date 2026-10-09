@@ -1,0 +1,32 @@
+import { PortableTextLinkPlugins, linkAnnotation } from "@driftime/sanity-plugin-link";
+import { TextInitialIcon } from "lucide-react";
+import { defineArrayMember, defineType } from "sanity";
+import type { PortableTextTextBlock } from "sanity";
+
+import { createSanityIcon } from "@/lib/icons";
+import { ParagraphStyle } from "@/sanity/components/styles";
+import type { SanityKeyedArray } from "@/sanity/types";
+
+export type SanityStandardPortableText = SanityKeyedArray<PortableTextTextBlock>;
+
+export const standardPortableText = defineType({
+  name: "standardPortableText",
+  type: "array",
+  icon: createSanityIcon(TextInitialIcon),
+  description: "Rich text with formatting, lists, and links.",
+  components: {
+    portableText: {
+      plugins: PortableTextLinkPlugins,
+    },
+  },
+  of: [
+    defineArrayMember({
+      name: "block",
+      type: "block",
+      styles: [{ title: "Paragraph", value: "normal", component: ParagraphStyle }],
+      marks: {
+        annotations: [linkAnnotation],
+      },
+    }),
+  ],
+});

@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Must match `containerMaxWidth` in config/images.ts. */
+  --breakpoint-container: 1440px;
+
+  --font-sans: var(--font-geist);
+}
+
+@custom-variant hocus (&:hover, &:focus, &:focus-within);
+
+@utility font-h1 {
+  @apply font-sans text-4xl leading-none font-semibold tracking-tight md:text-5xl;
+}
+
+@utility font-h2 {
+  @apply font-sans text-3xl leading-none font-semibold tracking-tight md:text-4xl;
+}
+
+@utility font-h3 {
+  @apply font-sans text-2xl leading-none font-semibold tracking-tight md:text-3xl;
+}
+
+@utility font-h4 {
+  @apply font-sans text-xl leading-none font-semibold tracking-tight md:text-2xl;
+}
+
+@utility font-h5 {
+  @apply font-sans text-lg leading-none font-semibold tracking-tight md:text-xl;
+}
+
+@utility font-h6 {
+  @apply font-sans text-base leading-none font-semibold tracking-tight md:text-lg;
+}
+
+@utility font-button {
+  @apply font-sans text-sm leading-none font-medium tracking-normal;
+}
+
+@utility font-p {
+  @apply font-sans text-base leading-snug font-normal tracking-normal;
+}
+
+@utility focus-ring {
+  &:has([data-focus-visible]),
+  &[data-focus-visible],
+  .group\/focus:has([data-focus-visible]) &,
+  .group\/focus[data-focus-visible] & {
+    @apply ring-1 ring-teal-400! outline-none [&:not([class*='rounded-'])]:rounded-md;
+  }
+
+  &[data-focused] {
+    @apply outline-none;
+  }
+}
+
+@utility focus-border {
+  &:has([data-focus-visible]),
+  &[data-focus-visible],
+  .group\/focus:has([data-focus-visible]) &,
+  .group\/focus[data-focus-visible] & {
+    @apply border border-teal-400! outline-none;
+  }
+
+  &[data-focused] {
+    @apply outline-none;
+  }
+}
+
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  h1 {
+    @apply font-h1;
+  }
+
+  h2 {
+    @apply font-h2;
+  }
+
+  h3 {
+    @apply font-h3;
+  }
+
+  h4 {
+    @apply font-h4;
+  }
+
+  h5 {
+    @apply font-h5;
+  }
+
+  h6 {
+    @apply font-h6;
+  }
+
+  ::selection {
+    @apply bg-teal-400 text-black;
+  }
+}
+
+/*
+ * Sets the typography plugin's colours to the neutral palette.
+ * Variables: https://github.com/tailwindlabs/tailwindcss-typography#customizing-the-css
+ */
+.prose {
+  --tw-prose-body: var(--color-neutral-700);
+  --tw-prose-headings: var(--color-neutral-900);
+  --tw-prose-lead: var(--color-neutral-600);
+  --tw-prose-links: var(--color-neutral-900);
+  --tw-prose-bold: var(--color-neutral-900);
+  --tw-prose-counters: var(--color-neutral-500);
+  --tw-prose-bullets: var(--color-neutral-300);
+  --tw-prose-hr: var(--color-neutral-200);
+  --tw-prose-quotes: var(--color-neutral-900);
+  --tw-prose-quote-borders: var(--color-neutral-200);
+  --tw-prose-captions: var(--color-neutral-500);
+  --tw-prose-kbd: var(--color-neutral-900);
+  --tw-prose-kbd-shadows: color-mix(in srgb, var(--color-neutral-900) 10%, transparent);
+  --tw-prose-code: var(--color-neutral-900);
+  --tw-prose-pre-code: var(--color-neutral-200);
+  --tw-prose-pre-bg: var(--color-neutral-800);
+  --tw-prose-th-borders: var(--color-neutral-300);
+  --tw-prose-td-borders: var(--color-neutral-200);
+}

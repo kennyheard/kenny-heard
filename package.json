@@ -1,0 +1,64 @@
+{
+  "name": "cairn",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An intentional step towards a more responsible web.",
+  "homepage": "https://cairn.driftime.com",
+  "bugs": {
+    "url": "https://github.com/driftime/cairn/issues",
+    "email": "kenny@driftime.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Kenny Heard",
+    "email": "kenny@driftime.com",
+    "url": "https://driftime.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/driftime/cairn.git"
+  },
+  "type": "module",
+  "scripts": {
+    "check": "oxfmt --check && oxlint",
+    "fix": "oxfmt && oxlint --fix",
+    "dev": "next dev",
+    "build": "next typegen && bun run check && next build",
+    "start": "next start",
+    "postinstall": "next typegen"
+  },
+  "dependencies": {
+    "@driftime/sanity-plugin-link": "0.2.1",
+    "@portabletext/react": "8.0.1",
+    "@sanity/asset-utils": "2.3.0",
+    "@sanity/image-url": "2.1.1",
+    "lucide-react": "1.52.0",
+    "next": "16.4.0",
+    "next-sanity": "13.3.4",
+    "nuqs": "2.10.1",
+    "react": "19.3.0",
+    "react-aria-components": "1.21.1",
+    "react-dom": "19.3.0",
+    "sanity": "6.18.0",
+    "server-only": "0.0.1",
+    "sonner": "2.0.8",
+    "tailwind-variants": "3.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@tailwindcss/typography": "0.5.20",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "oxfmt": "0.72.0",
+    "oxlint": "1.87.0",
+    "oxlint-tsgolint": "7.0.2003",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2"
+  },
+  "postcss": {
+    "plugins": {
+      "@tailwindcss/postcss": {}
+    }
+  }
+}

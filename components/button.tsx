@@ -1,0 +1,45 @@
+"use client";
+
+import { Button as ReactAriaButton, composeRenderProps } from "react-aria-components";
+import type { ButtonProps as ReactAriaButtonProps } from "react-aria-components";
+import { tv } from "tailwind-variants";
+import type { VariantProps } from "tailwind-variants";
+
+// oxlint-disable-next-line import/no-cycle -- Variants are only invoked at render time, never during module evaluation.
+import { variants as linkVariants } from "@/components/link";
+
+export type ButtonProps<T extends "button" | "link" = "button"> = T extends "button"
+  ? ReactAriaButtonProps & VariantProps<typeof variants> & { as?: "button" }
+  : ReactAriaButtonProps & Omit<VariantProps<typeof linkVariants>, "active"> & { as: "link" };
+
+export const variants = tv({
+  base: "group focus-border font-button relative flex max-h-fit max-w-fit min-w-max items-center justify-center gap-x-2 rounded-lg p-2 whitespace-nowrap transition-colors active:scale-97 disabled:opacity-50",
+  variants: {
+    theme: {
+      primary: "hocus:bg-neutral-100 border border-neutral-200 bg-white",
+    },
+  },
+  defaultVariants: {
+    theme: "primary",
+  },
+});
+
+export function Button({ className, children, ...props }: ButtonProps<"button" | "link">) {
+  function composeVariants() {
+    if (props.as === "link") {
+      const { intent } = props;
+      return composeRenderProps(className, (composedClassName) =>
+        linkVariants({ intent, className: composedClassName }),
+      );
+    }
+
+    const { theme } = props;
+    return composeRenderProps(className, (composedClassName) => variants({ theme, className: composedClassName }));
+  }
+
+  return (
+    <ReactAriaButton className={composeVariants()} {...props}>
+      {children}
+    </ReactAriaButton>
+  );
+}
