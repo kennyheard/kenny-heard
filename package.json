@@ -30,6 +30,7 @@
   "dependencies": {
     "@central-icons-react/round-filled-radius-2-stroke-1": "1.2.10",
     "@central-icons-react/round-outlined-radius-2-stroke-1": "1.2.10",
+    "@driftime/sanity-plugin-icon": "0.4.0",
     "@driftime/sanity-plugin-link": "0.2.1",
     "@portabletext/react": "8.0.1",
     "@sanity/asset-utils": "2.3.0",

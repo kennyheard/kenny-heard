@@ -6,9 +6,6 @@ export const imageAssetFragment = `asset-> { _id, metadata { lqip } }`;
 /** Expands an image's asset reference into the asset's id alone, for images too small to need a blurred placeholder. */
 export const imageAssetIdFragment = `asset-> { _id }`;
 
-/** Expands a button's link. */
-export const buttonFragment = `link { ..., ${linkFragment} }`;
-
 /** Expands the links in a text block. */
 export const standardPortableTextFragment = `markDefs[] { ..., ${linkFragment} }`;
 
@@ -16,14 +13,6 @@ export const standardPortableTextFragment = `markDefs[] { ..., ${linkFragment} }
 export const extendedPortableTextFragment = `
   _type == "block" => { ..., ${standardPortableTextFragment} },
   _type == "accessibleImage" => { ..., ${imageAssetFragment} }
-`;
-
-/** Expands the links in each content block. */
-export const contentFragment = `
-  _type == "textBlock" => {
-    ...,
-    body[] { ..., ${standardPortableTextFragment} }
-  }
 `;
 
 /** Expands a navigation menu's links. */

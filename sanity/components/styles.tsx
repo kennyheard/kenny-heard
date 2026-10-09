@@ -1,28 +1,35 @@
 "use client";
 
-import { Heading, Text } from "@sanity/ui";
+import { Box, Heading, Text } from "@sanity/ui";
 import type { BlockStyleProps } from "sanity";
 
-export function ParagraphStyle({ children }: BlockStyleProps) {
-  return <Text size={2}>{children}</Text>;
+import { isDefined } from "@/lib/utils";
+
+export type StyleProps = Partial<BlockStyleProps> & Pick<BlockStyleProps, "children">;
+
+export function ParagraphStyle({ children, block }: StyleProps) {
+  if (!isDefined(block)) return <Text size={1}>{children}</Text>;
+  if (isDefined(block.listItem)) return <Text size={2}>{children}</Text>;
+
+  return (
+    <Box paddingY={1}>
+      <Text size={2}>{children}</Text>
+    </Box>
+  );
 }
 
-export function Heading2Style({ children }: BlockStyleProps) {
-  return <Heading size={5}>{children}</Heading>;
-}
+export function SubheadingStyle({ children, block }: StyleProps) {
+  if (!isDefined(block)) {
+    return (
+      <Text size={1} weight="semibold">
+        {children}
+      </Text>
+    );
+  }
 
-export function Heading3Style({ children }: BlockStyleProps) {
-  return <Heading size={4}>{children}</Heading>;
-}
-
-export function Heading4Style({ children }: BlockStyleProps) {
-  return <Heading size={3}>{children}</Heading>;
-}
-
-export function Heading5Style({ children }: BlockStyleProps) {
-  return <Heading size={2}>{children}</Heading>;
-}
-
-export function Heading6Style({ children }: BlockStyleProps) {
-  return <Heading size={1}>{children}</Heading>;
+  return (
+    <Box paddingTop={2} paddingBottom={2}>
+      <Heading size={2}>{children}</Heading>
+    </Box>
+  );
 }

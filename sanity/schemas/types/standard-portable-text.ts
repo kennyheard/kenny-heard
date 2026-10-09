@@ -13,7 +13,7 @@ export const standardPortableText = defineType({
   name: "standardPortableText",
   type: "array",
   icon: createSanityIcon(IconParagraph),
-  description: "Rich text with formatting, lists, and links.",
+  description: "Rich text with bold, italic, code, lists, and links.",
   components: {
     portableText: {
       plugins: PortableTextLinkPlugins,
@@ -24,7 +24,16 @@ export const standardPortableText = defineType({
       name: "block",
       type: "block",
       styles: [{ title: "Paragraph", value: "normal", component: ParagraphStyle }],
+      lists: [
+        { title: "Bulleted List", value: "bullet" },
+        { title: "Numbered List", value: "number" },
+      ],
       marks: {
+        decorators: [
+          { title: "Bold", value: "strong" },
+          { title: "Italic", value: "em" },
+          { title: "Code", value: "code" },
+        ],
         annotations: [linkAnnotation],
       },
     }),

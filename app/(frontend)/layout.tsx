@@ -12,7 +12,7 @@ import { Main } from "@/components/main";
 import { DraftModeToast } from "@/components/sanity/draft-mode-toast";
 import { geist } from "@/config/fonts";
 import { resolveMetadata } from "@/config/metadata";
-import { navigationQuery, templatesQuery } from "@/sanity/groq/documents";
+import { identityQuery, navigationQuery } from "@/sanity/groq/documents";
 import { handleSanityLiveError } from "@/sanity/lib/errors";
 import { SanityLive, getDynamicFetchOptions, sanityFetch } from "@/sanity/lib/live";
 import type { DynamicFetchOptions } from "@/sanity/lib/live";
@@ -68,9 +68,10 @@ async function DynamicHeader() {
 async function CachedHeader({ perspective, stega }: DynamicFetchOptions) {
   "use cache";
 
-  const { data: navigation } = await sanityFetch({ query: navigationQuery, perspective, stega });
+  const { data: identity } = await sanityFetch({ query: identityQuery, perspective, stega });
+  const { name, role } = identity ?? {};
 
-  return <Header menu={navigation?.header} />;
+  return <Header name={name} role={role} />;
 }
 
 async function DynamicFooter() {
@@ -82,7 +83,8 @@ async function DynamicFooter() {
 async function CachedFooter({ perspective, stega }: DynamicFetchOptions) {
   "use cache";
 
-  const { data: templates } = await sanityFetch({ query: templatesQuery, perspective, stega });
+  const { data: navigation } = await sanityFetch({ query: navigationQuery, perspective, stega });
+  const { footer, social } = navigation ?? {};
 
-  return <Footer attribution={templates?.attribution} />;
+  return <Footer menu={footer} social={social} />;
 }

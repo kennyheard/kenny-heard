@@ -64,6 +64,8 @@ type SanityMetadataDocument = SanityRoutedDocument &
     title?: string;
     /** Description, used when there is no SEO description. */
     description?: string;
+    /** Opening line, used when there is no SEO description or description. */
+    introduction?: string;
     /** Image, used when there is no SEO image. */
     image?: SanityAnyImage;
   };
@@ -134,12 +136,12 @@ export function defineMetadataConfig({ site, metadata = {} }: MetadataConfig) {
       });
     }
 
-    const { _type, seoTitle, seoDescription, seoImage, title, description, image } = document;
+    const { _type, seoTitle, seoDescription, seoImage, title, description, introduction, image } = document;
 
     return resolveMetadata({
       title: seoTitle ?? title ?? settings?.seoTitle,
       suffix: settings?.seoSuffix,
-      description: seoDescription ?? description ?? settings?.seoDescription,
+      description: seoDescription ?? description ?? introduction ?? settings?.seoDescription,
       image: seoImage ?? image ?? settings?.seoImage,
       canonical: resolveRoute(document),
       robots: isIndexedRoute(_type) ? undefined : { index: false },

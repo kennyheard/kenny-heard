@@ -1,5 +1,6 @@
 "use client";
 
+import { iconPlugin } from "@driftime/sanity-plugin-icon";
 import { linkPlugin } from "@driftime/sanity-plugin-link";
 import { defineConfig } from "sanity";
 import { presentationTool } from "sanity/presentation";
@@ -38,6 +39,7 @@ export default defineConfig({
         },
       },
     }),
+    iconPlugin({ library: "central", style: "round-outlined-radius-2-stroke-1" }),
     linkPlugin({ documentTypes: objectKeys(routes) }),
     lockDocumentsPlugin(lockedDocumentTypes),
   ],

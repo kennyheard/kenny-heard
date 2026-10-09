@@ -32,10 +32,14 @@ export const routes = defineLinkRoutes({
     path: "/",
     sitemap: { changeFrequency: "weekly", priority: 1 },
   },
-  page: {
-    path: "/[slug]",
+  article: {
+    path: "/writing/[slug]",
     params: { slug: "slug.current" },
     sitemap: { changeFrequency: "monthly", priority: 0.9 },
+  },
+  colophon: {
+    path: "/colophon",
+    sitemap: { changeFrequency: "yearly", priority: 0.5 },
   },
 } as const satisfies Record<string, RouteDefinition>);
 
