@@ -10,7 +10,9 @@ export type PortableImageProps = Omit<ImageProps, "image" | "profile" | "childre
     value: SanityAccessibleImage;
   };
 
-export const variants = tv({});
+export const variants = tv({
+  base: "md:my-6",
+});
 
 export function PortableImage({ value: image, className, ...props }: PortableImageProps) {
   return <Image image={image} profile="content" className={variants({ className })} {...props} />;

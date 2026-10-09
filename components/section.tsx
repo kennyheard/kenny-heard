@@ -5,12 +5,20 @@ import type { VariantProps } from "tailwind-variants";
 export type SectionProps = ComponentProps<"section"> & VariantProps<typeof variants>;
 
 export const variants = tv({
-  base: "px-6 py-12 md:px-8 md:py-16",
+  variants: {
+    type: {
+      introduction: "pt-12 md:pt-16",
+      content: "pt-16 md:pt-24",
+    },
+  },
+  defaultVariants: {
+    type: "content",
+  },
 });
 
-export function Section({ className, children, ...props }: SectionProps) {
+export function Section({ type, className, children, ...props }: SectionProps) {
   return (
-    <section className={variants({ className })} {...props}>
+    <section className={variants({ type, className })} {...props}>
       {children}
     </section>
   );

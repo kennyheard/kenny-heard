@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { HomeDocument } from "@/components/documents/home";
 import { resolveSanityMetadata } from "@/config/metadata";
 import { isDefined } from "@/lib/utils";
-import { homeQuery, settingsQuery } from "@/sanity/groq/documents";
+import { feedQuery, homeQuery, settingsQuery } from "@/sanity/groq/documents";
 import { getDynamicFetchOptions, sanityFetch, sanityFetchCached } from "@/sanity/lib/live";
 import type { CachedDocumentProps } from "@/sanity/lib/live";
 
@@ -38,9 +38,12 @@ async function DynamicHome() {
 async function CachedHome({ perspective, stega, isDraftMode }: CachedDocumentProps) {
   "use cache";
 
-  const { data: home } = await sanityFetch({ query: homeQuery, perspective, stega });
+  const [{ data: home }, { data: feed }] = await Promise.all([
+    sanityFetch({ query: homeQuery, perspective, stega }),
+    sanityFetch({ query: feedQuery, perspective, stega }),
+  ]);
 
   if (!(isDefined(home?._id) || isDraftMode)) notFound();
 
-  return <HomeDocument document={home} />;
+  return <HomeDocument document={home} feed={feed} />;
 }

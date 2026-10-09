@@ -1,4 +1,5 @@
 import { linkFragment, routeParamsFragment } from "@/config/links";
+import type { SanityFeedItem } from "@/lib/feed";
 import {
   extendedPortableTextFragment,
   navigationMenuFragment,
@@ -20,6 +21,22 @@ export const homeQuery = defineTypedQuery<SanityHome>(`
     ${routeParamsFragment},
     endNote { ..., body[] { ..., ${standardPortableTextFragment} } },
     ${seoFieldsFragment}
+  }
+`);
+
+/** Articles and entries, newest first, with only the fields the feed shows and the text of each article's body. */
+export const feedQuery = defineTypedQuery<SanityFeedItem[]>(`
+  *[_type in ["article", "entry"] && defined(date)] | order(date desc) {
+    _id,
+    _type,
+    icon,
+    title,
+    description,
+    date,
+    ${routeParamsFragment},
+    link { ..., ${linkFragment} },
+    comingSoon,
+    _type == "article" => { "body": body[_type == "block"] { _type, children[] { _type, text } } }
   }
 `);
 

@@ -22,7 +22,7 @@ type StaticNavigationProps = NavigationProps & {
 };
 
 export const variants = tv({
-  base: "flex flex-wrap gap-x-8",
+  base: "font-link flex flex-wrap items-center gap-x-6 gap-y-3",
 });
 
 export function Navigation(props: NavigationProps) {
@@ -47,7 +47,7 @@ function StaticNavigation({ menu, pathname, className, ...props }: StaticNavigat
   return (
     <nav className={variants({ className })} aria-label={stegaClean(name)} {...props}>
       {links.map((link) => (
-        <Link key={link._key} link={link} pathname={pathname} />
+        <Link key={link._key} link={link} pathname={pathname} intent="standalone" tone="muted" />
       ))}
     </nav>
   );

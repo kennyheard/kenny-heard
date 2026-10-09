@@ -1,13 +1,14 @@
 "use client";
 
-import { IconArrowRotateClockwise, IconHome } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconArrowLeft, IconArrowRotateClockwise } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import { useEffect } from "react";
 
 import { Button } from "@/components/button";
 import { Container } from "@/components/container";
+import { Icon } from "@/components/icon";
 import { Link } from "@/components/link";
+import { Row } from "@/components/row";
 import { Section } from "@/components/section";
-import { defaultIconProps } from "@/config/icons";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -20,20 +21,26 @@ export default function Error({ error, unstable_retry }: ErrorProps) {
   }, [error]);
 
   return (
-    <Section>
+    <Section type="introduction">
       <Container>
-        <h1>Something went wrong</h1>
-        <p>This page couldn’t be loaded. Try again, or go back to the home page.</p>
-        <div className="flex flex-wrap gap-2">
-          <Button onPress={unstable_retry}>
-            <IconArrowRotateClockwise {...defaultIconProps} />
-            Try again
-          </Button>
-          <Link as="button" href="/">
-            <IconHome {...defaultIconProps} />
-            Go home
-          </Link>
-        </div>
+        <Row label="500" headingLevel={1}>
+          <div className="flex flex-col gap-6">
+            <p className="font-intro text-muted text-pretty">
+              Something broke behind the scenes before this page could reach you, and I’m sorry about that. These things
+              tend to sort themselves out quickly, so a second try is usually all it takes.
+            </p>
+            <div className="flex flex-wrap gap-6">
+              <Link as="button" href="/">
+                <Icon icon={IconArrowLeft} size="1rem" tone="inherit" />
+                Back to the home page
+              </Link>
+              <Button onPress={unstable_retry}>
+                <Icon icon={IconArrowRotateClockwise} size="1rem" tone="inherit" />
+                Try again
+              </Button>
+            </div>
+          </div>
+        </Row>
       </Container>
     </Section>
   );

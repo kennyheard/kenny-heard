@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import { Suspense } from "react";
@@ -10,8 +10,9 @@ import { Header } from "@/components/header";
 import { Link } from "@/components/link";
 import { Main } from "@/components/main";
 import { DraftModeToast } from "@/components/sanity/draft-mode-toast";
-import { geist } from "@/config/fonts";
+import { geistMono, timelessSans, timelessSerif } from "@/config/fonts";
 import { resolveMetadata } from "@/config/metadata";
+import { darkSchemeQuery, lightSchemeQuery, themeColors, themeScript } from "@/config/theme";
 import { identityQuery, navigationQuery } from "@/sanity/groq/documents";
 import { handleSanityLiveError } from "@/sanity/lib/errors";
 import { SanityLive, getDynamicFetchOptions, sanityFetch } from "@/sanity/lib/live";
@@ -21,31 +22,53 @@ import "@/app/styles/globals.css";
 
 export const metadata: Metadata = resolveMetadata();
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: lightSchemeQuery, color: themeColors.light.background },
+    { media: darkSchemeQuery, color: themeColors.dark.background },
+  ],
+};
+
+// oxlint-disable-next-line react/no-danger -- The theme must apply before first paint, which only an inline script can do.
+const themeScriptElement = <script dangerouslySetInnerHTML={{ __html: themeScript }} />;
+
 export default async function FrontendLayout({ children }: LayoutProps<"/">) {
   const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang="en-GB" className={cn(geist.variable, "font-p antialiased")}>
-      <body className="bg-neutral-50 text-black">
+    <html
+      lang="en-GB"
+      suppressHydrationWarning
+      className={cn(
+        timelessSans.variable,
+        timelessSerif.variable,
+        geistMono.variable,
+        "bg-background text-base antialiased scheme-light dark:scheme-dark",
+      )}
+    >
+      <head>{themeScriptElement}</head>
+      <body id="top" className="text-foreground font-sans">
         <Link as="button" href="#main" className="fixed top-0 left-4 z-100 -translate-y-full focus:translate-y-4">
           Skip to content
         </Link>
         <Providers>
-          {isDraftMode ? (
-            <Suspense fallback={<Header />}>
-              <DynamicHeader />
-            </Suspense>
-          ) : (
-            <CachedHeader perspective="published" stega={false} />
-          )}
-          <Main>{children}</Main>
-          {isDraftMode ? (
-            <Suspense fallback={<Footer />}>
-              <DynamicFooter />
-            </Suspense>
-          ) : (
-            <CachedFooter perspective="published" stega={false} />
-          )}
+          <div className="flex min-h-dvh flex-col px-8 py-12 md:py-16">
+            {isDraftMode ? (
+              <Suspense fallback={<Header />}>
+                <DynamicHeader />
+              </Suspense>
+            ) : (
+              <CachedHeader perspective="published" stega={false} />
+            )}
+            <Main className="flex flex-1 flex-col">{children}</Main>
+            {isDraftMode ? (
+              <Suspense fallback={<Footer />}>
+                <DynamicFooter />
+              </Suspense>
+            ) : (
+              <CachedFooter perspective="published" stega={false} />
+            )}
+          </div>
           <SanityLive onError={handleSanityLiveError} includeDrafts={isDraftMode} />
           {isDraftMode && (
             <>

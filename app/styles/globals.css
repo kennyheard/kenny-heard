@@ -1,45 +1,86 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Must match `containerMaxWidth` in config/images.ts. */
-  --breakpoint-container: 1440px;
+  --breakpoint-container: 640px;
 
-  --font-sans: var(--font-geist);
+  --font-sans: var(--font-timeless-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-timeless-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-background: var(--color-zinc-50);
+  --color-foreground: var(--color-zinc-900);
+  --color-muted: var(--color-zinc-500);
+  --color-faint: var(--color-zinc-300);
+  --color-underline: var(--color-zinc-400);
+  --color-rule: var(--color-zinc-200);
+  --color-hairline: --alpha(var(--color-black) / 10%);
+  --color-selection: var(--color-zinc-200);
+
+  --color-code: var(--color-zinc-700);
+  --color-code-variable: var(--color-zinc-600);
+  --color-code-operator: var(--color-muted);
+  --color-code-keyword: var(--color-muted);
+  --color-code-comment: var(--color-zinc-400);
+  --color-code-function: var(--color-teal-600);
 }
 
-@custom-variant hocus (&:hover, &:focus, &:focus-within);
+@custom-variant hocus {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
 
-@utility font-h1 {
-  @apply font-sans text-4xl leading-none font-semibold tracking-tight md:text-5xl;
+  &[data-focus-visible],
+  &:has([data-focus-visible]) {
+    @slot;
+  }
 }
 
-@utility font-h2 {
-  @apply font-sans text-3xl leading-none font-semibold tracking-tight md:text-4xl;
+@utility font-heading {
+  @apply font-serif text-4xl/tight italic;
 }
 
-@utility font-h3 {
-  @apply font-sans text-2xl leading-none font-semibold tracking-tight md:text-3xl;
+@utility font-quote {
+  @apply font-serif text-2xl/snug italic;
 }
 
-@utility font-h4 {
-  @apply font-sans text-xl leading-none font-semibold tracking-tight md:text-2xl;
+@utility font-subheading {
+  @apply font-serif text-xl/snug italic;
 }
 
-@utility font-h5 {
-  @apply font-sans text-lg leading-none font-semibold tracking-tight md:text-xl;
+@utility font-term {
+  @apply font-serif text-2xl/snug;
 }
 
-@utility font-h6 {
-  @apply font-sans text-base leading-none font-semibold tracking-tight md:text-lg;
+@utility font-title {
+  @apply font-serif text-base/snug;
 }
 
-@utility font-button {
-  @apply font-sans text-sm leading-none font-medium tracking-normal;
+@utility font-caption {
+  @apply font-serif text-sm italic;
 }
 
-@utility font-p {
-  @apply font-sans text-base leading-snug font-normal tracking-normal;
+@utility font-body {
+  @apply font-serif text-base/loose font-light;
+}
+
+@utility font-intro {
+  @apply font-sans text-sm/normal;
+}
+
+@utility font-description {
+  @apply font-sans text-sm/normal;
+}
+
+@utility font-link {
+  @apply font-sans text-sm/normal;
+}
+
+@utility font-meta {
+  @apply font-mono text-xs/normal;
 }
 
 @utility focus-ring {
@@ -47,7 +88,7 @@
   &[data-focus-visible],
   .group\/focus:has([data-focus-visible]) &,
   .group\/focus[data-focus-visible] & {
-    @apply ring-1 ring-teal-400! outline-none [&:not([class*='rounded-'])]:rounded-md;
+    @apply ring-muted! ring-offset-background rounded-xs ring-1 ring-offset-2 outline-none;
   }
 
   &[data-focused] {
@@ -60,7 +101,7 @@
   &[data-focus-visible],
   .group\/focus:has([data-focus-visible]) &,
   .group\/focus[data-focus-visible] & {
-    @apply border border-teal-400! outline-none;
+    @apply border-muted! border outline-none;
   }
 
   &[data-focused] {
@@ -68,61 +109,32 @@
   }
 }
 
+@utility dotted-underline {
+  @apply hocus:decoration-foreground decoration-underline underline decoration-dotted underline-offset-5;
+}
+
 @layer base {
+  .dark {
+    --color-background: var(--color-zinc-900);
+    --color-foreground: var(--color-zinc-100);
+    --color-muted: var(--color-zinc-400);
+    --color-faint: var(--color-zinc-700);
+    --color-underline: var(--color-zinc-600);
+    --color-rule: var(--color-zinc-800);
+    --color-hairline: --alpha(var(--color-white) / 5%);
+    --color-selection: var(--color-zinc-800);
+
+    --color-code: var(--color-zinc-300);
+    --color-code-variable: var(--color-zinc-400);
+    --color-code-comment: var(--color-zinc-600);
+    --color-code-function: var(--color-teal-400);
+  }
+
   * {
     min-width: 0;
   }
 
-  h1 {
-    @apply font-h1;
-  }
-
-  h2 {
-    @apply font-h2;
-  }
-
-  h3 {
-    @apply font-h3;
-  }
-
-  h4 {
-    @apply font-h4;
-  }
-
-  h5 {
-    @apply font-h5;
-  }
-
-  h6 {
-    @apply font-h6;
-  }
-
   ::selection {
-    @apply bg-teal-400 text-black;
+    @apply bg-selection text-foreground;
   }
-}
-
-/*
- * Sets the typography plugin's colours to the neutral palette.
- * Variables: https://github.com/tailwindlabs/tailwindcss-typography#customizing-the-css
- */
-.prose {
-  --tw-prose-body: var(--color-neutral-700);
-  --tw-prose-headings: var(--color-neutral-900);
-  --tw-prose-lead: var(--color-neutral-600);
-  --tw-prose-links: var(--color-neutral-900);
-  --tw-prose-bold: var(--color-neutral-900);
-  --tw-prose-counters: var(--color-neutral-500);
-  --tw-prose-bullets: var(--color-neutral-300);
-  --tw-prose-hr: var(--color-neutral-200);
-  --tw-prose-quotes: var(--color-neutral-900);
-  --tw-prose-quote-borders: var(--color-neutral-200);
-  --tw-prose-captions: var(--color-neutral-500);
-  --tw-prose-kbd: var(--color-neutral-900);
-  --tw-prose-kbd-shadows: color-mix(in srgb, var(--color-neutral-900) 10%, transparent);
-  --tw-prose-code: var(--color-neutral-900);
-  --tw-prose-pre-code: var(--color-neutral-200);
-  --tw-prose-pre-bg: var(--color-neutral-800);
-  --tw-prose-th-borders: var(--color-neutral-300);
-  --tw-prose-td-borders: var(--color-neutral-200);
 }

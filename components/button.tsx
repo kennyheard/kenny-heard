@@ -13,10 +13,12 @@ export type ButtonProps<T extends "button" | "link" = "button"> = T extends "but
   : ReactAriaButtonProps & Omit<VariantProps<typeof linkVariants>, "active"> & { as: "link" };
 
 export const variants = tv({
-  base: "group focus-border font-button relative flex max-h-fit max-w-fit min-w-max items-center justify-center gap-x-2 rounded-lg p-2 whitespace-nowrap transition-colors active:scale-97 disabled:opacity-50",
+  base: "group focus-ring text-muted hocus:text-foreground relative inline-flex w-fit cursor-pointer items-center whitespace-nowrap disabled:opacity-50",
   variants: {
     theme: {
-      primary: "hocus:bg-neutral-100 border border-neutral-200 bg-white",
+      primary: "dotted-underline font-link gap-1.5",
+      icon: "hocus:bg-rule/40 -m-2 rounded-md p-2",
+      compact: "hocus:bg-rule/40 -mx-2 -my-1 gap-1 rounded-md px-2 py-1 font-sans text-xs/normal",
     },
   },
   defaultVariants: {

@@ -22,7 +22,7 @@ export type ImageProps<T extends "image" | "src" = "image"> = T extends "image"
   : ImageCommonProps & NextImageProps & { image?: never };
 
 export const variants = tv({
-  base: "relative flex size-full flex-col items-center justify-center overflow-hidden",
+  base: "relative flex size-full flex-col items-center justify-center gap-3 overflow-hidden",
 });
 
 export function Image({ image, caption, profile, className, ...props }: ImageProps<"image" | "src">) {
@@ -33,7 +33,7 @@ export function Image({ image, caption, profile, className, ...props }: ImagePro
   const resolvedAlt = alt ?? resolvedImage?.alt ?? "";
 
   if (!isDefined(resolvedImage)) {
-    return <div className={variants({ className: cn("bg-neutral-200", className) })} />;
+    return <div className={variants({ className: cn("bg-rule", className) })} />;
   }
 
   return (
@@ -48,7 +48,7 @@ export function Image({ image, caption, profile, className, ...props }: ImagePro
         fill={fill}
         preload={preload}
         fetchPriority={preload === true ? "high" : "auto"}
-        className="size-full max-w-(--breakpoint-container) object-cover"
+        className="outline-hairline size-full max-w-(--breakpoint-container) rounded-md object-cover outline -outline-offset-1"
         style={{ objectPosition: resolvedImage.objectPosition, ...style }}
         {...(fill !== true && {
           width: resolvedImage.width,
@@ -56,7 +56,9 @@ export function Image({ image, caption, profile, className, ...props }: ImagePro
         })}
         {...forwardedProps}
       />
-      {isDefined(resolvedCaption) && <figcaption className="mt-4 mr-auto ml-0 text-sm">{resolvedCaption}</figcaption>}
+      {isDefined(resolvedCaption) && (
+        <figcaption className="font-caption self-start text-balance">{resolvedCaption}</figcaption>
+      )}
     </figure>
   );
 }

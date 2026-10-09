@@ -1,7 +1,9 @@
+import { withIcons } from "@driftime/sanity-plugin-icon/next";
 import type { NextConfig } from "next";
 import { sanity } from "next-sanity/live/cache-life";
 
 const config: NextConfig = {
+  agentRules: false,
   cacheComponents: true,
   partialPrefetching: true,
   cacheLife: {
@@ -13,4 +15,4 @@ const config: NextConfig = {
   },
 };
 
-export default config;
+export default withIcons()(config);

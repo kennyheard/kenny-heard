@@ -1,20 +1,29 @@
-import { IconHome } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconArrowLeft } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 
 import { Container } from "@/components/container";
+import { Icon } from "@/components/icon";
 import { Link } from "@/components/link";
+import { Row } from "@/components/row";
 import { Section } from "@/components/section";
-import { defaultIconProps } from "@/config/icons";
 
 export default function NotFound() {
   return (
-    <Section>
+    <Section type="introduction">
       <Container>
-        <h1>Page not found</h1>
-        <p>This page doesn’t exist or has moved.</p>
-        <Link as="button" href="/">
-          <IconHome {...defaultIconProps} />
-          Go home
-        </Link>
+        <Row label="404" headingLevel={1}>
+          <div className="flex flex-col gap-6">
+            <p className="font-intro text-muted text-pretty">
+              You’ve reached a page that doesn’t exist, which happens to all links eventually. It may have moved on when
+              things were rearranged, or it may simply never have been written.
+            </p>
+            <div className="flex flex-wrap gap-6">
+              <Link as="button" href="/">
+                <Icon icon={IconArrowLeft} size="1rem" tone="inherit" />
+                Back to the home page
+              </Link>
+            </div>
+          </div>
+        </Row>
       </Container>
     </Section>
   );

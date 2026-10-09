@@ -1,8 +1,10 @@
+import { stegaClean } from "next-sanity";
 import type { ComponentProps } from "react";
 import { tv } from "tailwind-variants";
 import type { VariantProps } from "tailwind-variants";
 
 import { Container } from "@/components/container";
+import { Icon } from "@/components/icon";
 import { Link } from "@/components/link";
 import { Navigation } from "@/components/navigation";
 import { isDefined } from "@/lib/utils";
@@ -18,17 +20,25 @@ export type FooterProps = Omit<ComponentProps<"footer">, "children"> &
   };
 
 export const variants = tv({
-  base: "px-6 py-6 md:px-8 md:py-8",
+  base: "pt-16 md:pt-24",
 });
 
 export function Footer({ menu, social, className, ...props }: FooterProps) {
   return (
-    <footer id="footer" className={variants({ className })} {...props}>
-      <Container>
-        <div className="flex flex-wrap gap-x-8">
+    <footer className={variants({ className })} {...props}>
+      <Container className="border-rule gap-8 border-t pt-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <Navigation menu={menu} />
-          {isDefined(social) && social.map(({ _key, link }) => <Link key={_key} link={link} />)}
         </div>
+        {isDefined(social) && (
+          <div className="flex gap-6">
+            {social.map(({ _key, link, icon }) => (
+              <Link key={_key} link={link} as="button" theme="icon" aria-label={stegaClean(link?.label)}>
+                <Icon icon={icon} size="1rem" tone="inherit" />
+              </Link>
+            ))}
+          </div>
+        )}
       </Container>
     </footer>
   );

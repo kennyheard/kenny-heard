@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowDown, IconArrowInbox, IconArrowUpRight } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconArrowInbox, IconArrowUpRight } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { SanityLink } from "@driftime/sanity-plugin-link/render";
 import NextLink from "next/link";
 import { Link as ReactAriaLink, composeRenderProps } from "react-aria-components";
@@ -10,7 +10,7 @@ import type { VariantProps } from "tailwind-variants";
 
 // oxlint-disable-next-line import/no-cycle -- Variants are only invoked at render time, never during module evaluation.
 import { variants as buttonVariants } from "@/components/button";
-import { defaultIconProps } from "@/config/icons";
+import { Icon } from "@/components/icon";
 import { resolveLink } from "@/config/links";
 import type { SanityRoute } from "@/config/routes";
 import { isDefined } from "@/lib/utils";
@@ -47,12 +47,18 @@ export type LinkProps<T extends "link" | "button" = "link"> = T extends "link"
   : LinkCommonProps & VariantProps<typeof buttonVariants> & { as: "button" };
 
 export const variants = tv({
-  base: "group focus-ring relative inline-flex w-fit transition-colors",
+  base: "group focus-ring relative",
   variants: {
     intent: {
       none: "",
-      inline: "hocus:underline inline",
+      inline: "dotted-underline inline",
+      standalone: "dotted-underline inline-flex w-fit items-center",
       block: "flex size-full",
+    },
+    tone: {
+      inherit: "",
+      muted: "hocus:text-foreground text-muted",
+      subtle: "hocus:text-foreground",
     },
     active: {
       true: "",
@@ -60,6 +66,7 @@ export const variants = tv({
   },
   defaultVariants: {
     intent: "inline",
+    tone: "inherit",
   },
 });
 
@@ -74,7 +81,7 @@ export function Link({
   ...props
 }: LinkProps<"link" | "button">) {
   const linkState = resolveLink({ link, route, href, pathname });
-  const { resolvedLink, isExternal, opensNewTab, hasAnchor } = linkState;
+  const { resolvedLink, isExternal, opensNewTab } = linkState;
   // These getters throw in development without a pathname, so only read them when one is given.
   const containsActivePath = isDefined(pathname) && linkState.containsActivePath;
   const isActivePath = isDefined(pathname) && linkState.isActivePath;
@@ -87,22 +94,21 @@ export function Link({
       );
     }
 
-    const { intent } = props;
+    const { intent, tone } = props;
     return composeRenderProps(className, (composedClassName) =>
-      variants({ intent, active: containsActivePath, className: composedClassName }),
+      variants({ intent, tone, active: containsActivePath, className: composedClassName }),
     );
   }
 
-  const isButton = props.as === "button";
-  const isLinkBlock = "intent" in props && props.intent === "block";
+  const isStandalone = "intent" in props && props.intent === "standalone";
+  const isMuted = "tone" in props && props.tone === "muted";
   const isDownloadLink = resolvedLink?.download === true;
   const isExternalLink = isExternal && !isDownloadLink;
 
-  const Icon = (() => {
-    if (isButton || isLinkBlock) return undefined;
+  const glyph = (() => {
+    if (!isStandalone) return undefined;
     if (isExternalLink) return IconArrowUpRight;
     if (isDownloadLink) return IconArrowInbox;
-    if (hasAnchor) return IconArrowDown;
 
     return undefined;
   })();
@@ -122,7 +128,13 @@ export function Link({
         <>
           {composedChildren ?? resolvedLink?.label}
           {opensNewTab && <span className="sr-only"> (opens in a new tab)</span>}
-          {isDefined(Icon) && <Icon {...defaultIconProps} className="ml-0.5 inline align-baseline" />}
+          {isDefined(glyph) && (
+            <Icon
+              icon={glyph}
+              tone={isMuted ? "inherit" : "muted"}
+              className="ml-0.5 inline -translate-y-[calc((1cap-1ex)/2)] align-middle"
+            />
+          )}
         </>
       ))}
     </ReactAriaLink>
