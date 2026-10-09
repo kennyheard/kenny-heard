@@ -3,6 +3,7 @@ import type { ComponentProps } from "react";
 import { tv } from "tailwind-variants";
 import type { VariantProps } from "tailwind-variants";
 
+import { CarbonFigure } from "@/components/carbon-figure";
 import { Container } from "@/components/container";
 import { Icon } from "@/components/icon";
 import { Link } from "@/components/link";
@@ -29,6 +30,7 @@ export function Footer({ menu, social, className, ...props }: FooterProps) {
       <Container className="border-rule gap-8 border-t pt-6 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <Navigation menu={menu} />
+          <CarbonFigure />
         </div>
         {isDefined(social) && (
           <div className="flex gap-6">

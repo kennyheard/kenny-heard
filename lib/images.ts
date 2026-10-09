@@ -40,8 +40,11 @@ interface ResolvedImage {
 /** Image profiles keyed by name. */
 export type ImageConfig<T extends string> = Record<T, ImageProfileDefinition>;
 
-/** URL builder for the configured dataset, shared because the loader builds a URL for every width. */
-const imageUrlBuilder = createImageUrlBuilder({ projectId, dataset });
+/**
+ * URL builder for the configured dataset, shared because the loader builds a URL for every width. Its URLs are on the
+ * site's own domain, so the carbon figure can count them.
+ */
+const imageUrlBuilder = createImageUrlBuilder({ baseUrl: "/", projectId, dataset });
 
 /**
  * Builds an image CDN URL for a Sanity image.
@@ -61,19 +64,20 @@ export function buildImageUrl(image: SanityAnyImage, options?: ImageUrlBuilderOp
  * Works out the dimensions of the image the CDN will deliver, from the requested size when it sets both
  * dimensions and from the author's crop otherwise.
  *
- * @param image - The image.
- * @param src - The image URL, which encodes the source dimensions.
+ * @param image - The image, whose asset ID encodes the source dimensions.
  * @param options - The options the URL was built with.
  * @returns The width, height, and aspect ratio.
  */
-function resolveDimensions(image: SanityAnyImage, src: string, options: ImageUrlBuilderOptions) {
+function resolveDimensions(image: SanityAnyImage, options: ImageUrlBuilderOptions) {
   const { width: pinnedWidth, height: pinnedHeight } = options;
 
   if (isDefined(pinnedWidth) && isDefined(pinnedHeight)) {
     return { width: pinnedWidth, height: pinnedHeight, aspectRatio: pinnedWidth / pinnedHeight };
   }
 
-  const { width: sourceWidth, height: sourceHeight } = getImageDimensions(src);
+  const { asset } = image;
+  const assetId = isDefined(asset) && "_ref" in asset ? asset._ref : asset?._id;
+  const { width: sourceWidth, height: sourceHeight } = getImageDimensions(assetId ?? "");
   const { left = 0, bottom = 0, right = 0, top = 0 } = image.crop ?? {};
 
   const width = Math.round(sourceWidth * (1 - left - right));
@@ -162,7 +166,7 @@ export function defineImageConfig<T extends string>(imageConfig: ImageConfig<T>)
     const loader = createImageLoader(image, options);
 
     const { caption, alt }: Partial<SanityAccessibleImage> = image._type === "accessibleImage" ? image : {};
-    const { width, height, aspectRatio } = resolveDimensions(image, src, options);
+    const { width, height, aspectRatio } = resolveDimensions(image, options);
     const { asset, hotspot } = image;
     const blurDataUrl = isExpandedReference(asset) ? asset.metadata?.lqip : undefined;
     const objectPosition = isDefined(hotspot) ? `${hotspot.x * 100}% ${hotspot.y * 100}%` : undefined;
