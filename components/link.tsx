@@ -46,13 +46,16 @@ export type LinkProps<T extends "link" | "button" = "link"> = T extends "link"
   ? LinkCommonProps & Omit<VariantProps<typeof variants>, "active"> & { as?: "link" }
   : LinkCommonProps & VariantProps<typeof buttonVariants> & { as: "button" };
 
+/** Invisible character that forbids a line break, so the arrow never wraps away from the last word. */
+const wordJoiner = "\u2060";
+
 export const variants = tv({
   base: "group focus-ring relative",
   variants: {
     intent: {
       none: "",
       inline: "dotted-underline inline",
-      standalone: "dotted-underline inline-flex w-fit items-center",
+      standalone: "dotted-underline inline",
       block: "flex size-full",
     },
     tone: {
@@ -129,7 +132,10 @@ export function Link({
           {composedChildren ?? resolvedLink?.label}
           {opensNewTab && <span className="sr-only"> (opens in a new tab)</span>}
           {isDefined(glyph) && (
-            <Icon icon={glyph} size="0.75em" tone={isMuted ? "inherit" : "muted"} inline className="ml-0.5" />
+            <>
+              {wordJoiner}
+              <Icon icon={glyph} size="0.75em" tone={isMuted ? "inherit" : "muted"} inline className="ml-0.5" />
+            </>
           )}
         </>
       ))}
