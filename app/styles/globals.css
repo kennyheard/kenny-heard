@@ -56,11 +56,11 @@
 }
 
 @utility font-title {
-  @apply font-serif text-base/snug;
+  @apply font-serif text-base/normal;
 }
 
 @utility font-caption {
-  @apply font-serif text-sm italic;
+  @apply font-serif text-sm/normal italic;
 }
 
 @utility font-body {
