@@ -6,9 +6,9 @@ export type HomeSocialImageProps = Omit<SocialImageFrameProps, "children"> & {
   introduction: string;
 };
 
-export function HomeSocialImage({ name, role, introduction }: HomeSocialImageProps) {
+export function HomeSocialImage({ name, profession, introduction }: HomeSocialImageProps) {
   return (
-    <SocialImageFrame name={name} role={role}>
+    <SocialImageFrame name={name} profession={profession}>
       <div style={{ maxWidth: 660, ...socialImageText.introduction }}>{introduction}</div>
     </SocialImageFrame>
   );

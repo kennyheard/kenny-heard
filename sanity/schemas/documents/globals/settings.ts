@@ -7,20 +7,18 @@ import { createSanityIcon } from "@/lib/icons";
 import { defineDocumentGroups } from "@/sanity/config/groups";
 import type { DocumentGroup } from "@/sanity/config/groups";
 import type { SanityMinimalPortableText } from "@/sanity/schemas/types/minimal-portable-text";
-import type { SanityImage } from "@/sanity/types";
 import type { Strict } from "@/types";
 
 export type SanitySettings = Strict<SanityDocument> & {
   _type: "settings";
   name?: string;
-  role?: SanityMinimalPortableText;
+  profession?: SanityMinimalPortableText;
 } & SanitySeoSettings;
 
 export interface SanitySeoSettings {
   seoTitle?: string;
   seoSuffix?: string;
   seoDescription?: string;
-  seoImage?: SanityImage;
 }
 
 export const settings = defineType({
@@ -28,7 +26,7 @@ export const settings = defineType({
   type: "document",
   title: "Settings",
   icon: createSanityIcon(IconSettingsToggle1),
-  description: "Your name and role, and site-wide SEO values for pages that don't set their own.",
+  description: "Your name and profession, and site-wide SEO values for pages that don't set their own.",
   groups: defineDocumentGroups({ defaultGroup: "header" }),
   preview: {
     prepare() {
@@ -45,7 +43,7 @@ export const settings = defineType({
       description: "Your name, shown at the top of every page.",
     }),
     defineField({
-      name: "role" satisfies keyof SanitySettings,
+      name: "profession" satisfies keyof SanitySettings,
       type: "minimalPortableText",
       group: "header" satisfies DocumentGroup,
       description:
@@ -56,7 +54,7 @@ export const settings = defineType({
       type: "string",
       title: "SEO Title",
       group: "seo" satisfies DocumentGroup,
-      description: `Title for search results and social previews on pages without one. Leave empty to use “${site.name}”.`,
+      description: `Title for search results and social previews on pages without one. Leave empty to use “${site.title}”.`,
     }),
     defineField({
       name: "seoSuffix" satisfies keyof SanitySettings,
@@ -72,16 +70,6 @@ export const settings = defineType({
       group: "seo" satisfies DocumentGroup,
       description: `Summary for search results and social previews on pages without one. Leave empty to use “${site.description}”.`,
       rows: 4,
-    }),
-    defineField({
-      name: "seoImage" satisfies keyof SanitySettings,
-      type: "image",
-      title: "SEO Image",
-      group: "seo" satisfies DocumentGroup,
-      description: "Image for social previews on pages without one. Upload a PNG or JPEG, ideally 1200 × 630 pixels.",
-      options: {
-        accept: "image/png, image/jpeg",
-      },
     }),
   ],
 });

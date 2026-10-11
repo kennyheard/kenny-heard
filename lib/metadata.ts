@@ -4,25 +4,23 @@ import { resolveRoute } from "@/config/links";
 import { isIndexedRoute } from "@/config/routes";
 import type { SanityRoutedDocument } from "@/config/routes";
 import { baseUrl, isProduction } from "@/lib/environment";
-import { buildImageUrl } from "@/lib/images";
 import { isDefined } from "@/lib/utils";
 import type { SanitySeoSettings } from "@/sanity/schemas/documents/globals/settings";
 import type { SanitySeoFields } from "@/sanity/schemas/shared/seo-fields";
-import type { SanityAnyImage } from "@/sanity/types";
 import type { Nullable } from "@/types";
 
 /** Site values that pages fall back to. */
 export interface SiteIdentity {
-  /** Site name, used as the title of pages without one and as the Open Graph site name. */
+  /** Site name, used as the Open Graph site name. */
   name: string;
+  /** Title of pages without one. */
+  title: string;
   /** Text added after every page title. */
   suffix: string;
   /** Character between a page title and the suffix, with a space either side. */
   separator: string;
   /** Description for pages without one. */
   description: string;
-  /** Social sharing image URL for pages without one. */
-  image: string;
 }
 
 /**
@@ -49,8 +47,6 @@ interface DocumentMetadata {
   suffix?: Nullable<string>;
   /** Page description. */
   description?: Nullable<string>;
-  /** Social sharing image. */
-  image?: Nullable<SanityAnyImage>;
   /** Canonical path. */
   canonical?: Nullable<string>;
   /** Crawling directives, overriding the site's and the environment's. */
@@ -66,8 +62,6 @@ type SanityMetadataDocument = SanityRoutedDocument &
     description?: string;
     /** Opening line, used when there is no SEO description or description. */
     introduction?: string;
-    /** Image, used when there is no SEO image. */
-    image?: SanityAnyImage;
   };
 
 /**
@@ -93,13 +87,10 @@ export function defineMetadataConfig({ site, metadata = {} }: MetadataConfig) {
    * @returns The page metadata.
    */
   function resolveMetadata(documentMetadata: DocumentMetadata = {}): Metadata {
-    const { title, suffix, description, image, canonical, robots } = documentMetadata;
+    const { title, suffix, description, canonical, robots } = documentMetadata;
 
-    const resolvedTitle = `${title ?? site.name} ${site.separator} ${suffix ?? site.suffix}`;
+    const resolvedTitle = `${title ?? site.title} ${site.separator} ${suffix ?? site.suffix}`;
     const resolvedDescription = description ?? site.description;
-    const resolvedImage = isDefined(image?.asset)
-      ? buildImageUrl(image, { width: 1200, height: 630, fit: "crop" })
-      : site.image;
 
     return {
       ...siteMetadata,
@@ -112,7 +103,6 @@ export function defineMetadataConfig({ site, metadata = {} }: MetadataConfig) {
         ...siteMetadata.openGraph,
         title: resolvedTitle,
         description: resolvedDescription,
-        images: resolvedImage,
       },
     };
   }
@@ -131,18 +121,16 @@ export function defineMetadataConfig({ site, metadata = {} }: MetadataConfig) {
         title: "Page not found",
         suffix: settings?.seoSuffix,
         description: settings?.seoDescription,
-        image: settings?.seoImage,
         robots: { index: false, follow: false },
       });
     }
 
-    const { _type, seoTitle, seoDescription, seoImage, title, description, introduction, image } = document;
+    const { _type, seoTitle, seoDescription, title, description, introduction } = document;
 
     return resolveMetadata({
       title: seoTitle ?? title ?? settings?.seoTitle,
       suffix: settings?.seoSuffix,
       description: seoDescription ?? description ?? introduction ?? settings?.seoDescription,
-      image: seoImage ?? image ?? settings?.seoImage,
       canonical: resolveRoute(document),
       robots: isIndexedRoute(_type) ? undefined : { index: false },
     });

@@ -11,15 +11,15 @@ import { isDefined } from "@/lib/utils";
 import type { SanityMinimalPortableText } from "@/sanity/schemas/types/minimal-portable-text";
 import type { Nullable } from "@/types";
 
-export type HeaderProps = Omit<ComponentProps<"header">, "children" | "role"> &
+export type HeaderProps = Omit<ComponentProps<"header">, "children"> &
   VariantProps<typeof variants> & {
     name?: Nullable<string>;
-    role?: Nullable<SanityMinimalPortableText>;
+    profession?: Nullable<SanityMinimalPortableText>;
   };
 
 export const variants = tv({});
 
-export function Header({ name, role, className, ...props }: HeaderProps) {
+export function Header({ name, profession, className, ...props }: HeaderProps) {
   return (
     <header className={variants({ className })} {...props}>
       <Container className="flex-row items-start justify-between gap-6">
@@ -27,7 +27,7 @@ export function Header({ name, role, className, ...props }: HeaderProps) {
           <Link href="/" intent="none" className="text-foreground w-fit">
             {name ?? site.name}
           </Link>
-          {isDefined(role) && <PortableText value={role} type="role" />}
+          {isDefined(profession) && <PortableText value={profession} type="profession" />}
         </div>
         <ThemeToggle />
       </Container>

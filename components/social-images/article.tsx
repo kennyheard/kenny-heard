@@ -10,12 +10,12 @@ export type ArticleSocialImageProps = Omit<SocialImageFrameProps, "children"> & 
   minutes?: number;
 };
 
-export function ArticleSocialImage({ name, role, title, date, minutes }: ArticleSocialImageProps) {
+export function ArticleSocialImage({ name, profession, title, date, minutes }: ArticleSocialImageProps) {
   // The renderer can't measure text, so titles past about two lines fill their lines instead of balancing, and stop at three.
   const isLong = title.length > 80;
 
   return (
-    <SocialImageFrame name={name} role={role}>
+    <SocialImageFrame name={name} profession={profession}>
       <div
         style={{
           ...socialImageText.title,

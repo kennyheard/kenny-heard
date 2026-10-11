@@ -18,8 +18,5 @@ export const extendedPortableTextFragment = `
 /** Expands a navigation menu's links. */
 export const navigationMenuFragment = `links[] { ..., ${linkFragment} }`;
 
-/** Expands a document's SEO image. */
-export const seoFieldsFragment = `seoImage { ..., ${imageAssetFragment} }`;
-
 /** SEO fields from the settings document. */
-export const seoSettingsFragment = `seoTitle, seoSuffix, seoDescription, seoImage { ..., ${imageAssetFragment} }`;
+export const seoSettingsFragment = `seoTitle, seoSuffix, seoDescription`;

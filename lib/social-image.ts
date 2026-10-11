@@ -21,13 +21,13 @@ export const socialImageFonts = await Promise.all(
 );
 
 /**
- * Fetches the name and role shown at the top of every social image, from the published settings.
+ * Fetches the name and profession shown at the top of every social image, from the published settings.
  *
- * @returns The name, and the role as plain text or undefined when there is none.
+ * @returns The name, and the profession as plain text or undefined when there is none.
  */
 export async function getSocialIdentity() {
   const { data: identity } = await sanityFetchCached({ query: identityQuery, perspective: "published" });
-  const { name, role } = identity ?? {};
+  const { name, profession } = identity ?? {};
 
-  return { name: name ?? site.name, role: isDefined(role) ? toPlainText(role) : undefined };
+  return { name: name ?? site.name, profession: isDefined(profession) ? toPlainText(profession) : undefined };
 }

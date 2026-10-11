@@ -3,7 +3,6 @@ import type { SanityFeedItem } from "@/lib/feed";
 import {
   extendedPortableTextFragment,
   navigationMenuFragment,
-  seoFieldsFragment,
   seoSettingsFragment,
   standardPortableTextFragment,
 } from "@/sanity/groq/fragments";
@@ -19,8 +18,7 @@ export const homeQuery = defineTypedQuery<SanityHome>(`
   *[_type == "home"][0] {
     ...,
     ${routeParamsFragment},
-    endNote { ..., body[] { ..., ${standardPortableTextFragment} } },
-    ${seoFieldsFragment}
+    endNote { ..., body[] { ..., ${standardPortableTextFragment} } }
   }
 `);
 
@@ -45,8 +43,7 @@ export const articleQuery = defineTypedQuery<SanityArticle>(`
   *[_type == "article" && slug.current == $slug][0] {
     ...,
     ${routeParamsFragment},
-    body[] { ..., ${extendedPortableTextFragment} },
-    ${seoFieldsFragment}
+    body[] { ..., ${extendedPortableTextFragment} }
   }
 `);
 
@@ -55,8 +52,7 @@ export const colophonQuery = defineTypedQuery<SanityColophon>(`
   *[_type == "colophon"][0] {
     ...,
     ${routeParamsFragment},
-    sections[] { ..., tools[] { ..., link { ..., ${linkFragment} } } },
-    ${seoFieldsFragment}
+    sections[] { ..., tools[] { ..., link { ..., ${linkFragment} } } }
   }
 `);
 
@@ -69,9 +65,9 @@ export const navigationQuery = defineTypedQuery<SanityNavigation>(`
   }
 `);
 
-/** Name and role shown at the top of every page. */
-export const identityQuery = defineTypedQuery<Pick<SanitySettings, "name" | "role">>(
-  `*[_type == "settings"][0] { name, role[] { ..., ${standardPortableTextFragment} } }`,
+/** Name and profession shown at the top of every page. */
+export const identityQuery = defineTypedQuery<Pick<SanitySettings, "name" | "profession">>(
+  `*[_type == "settings"][0] { name, profession[] { ..., ${standardPortableTextFragment} } }`,
 );
 
 /** Site-wide SEO settings. */

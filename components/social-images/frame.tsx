@@ -6,11 +6,11 @@ import { isDefined } from "@/lib/utils";
 
 export interface SocialImageFrameProps {
   name: string;
-  role?: string;
+  profession?: string;
   children: ReactNode;
 }
 
-export function SocialImageFrame({ name, role, children }: SocialImageFrameProps) {
+export function SocialImageFrame({ name, profession, children }: SocialImageFrameProps) {
   return (
     <div
       style={{
@@ -26,7 +26,9 @@ export function SocialImageFrame({ name, role, children }: SocialImageFrameProps
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 6, ...socialImageText.identity }}>
         <div>{name}</div>
-        {isDefined(role) && <div style={{ color: themeColors.light.muted, fontStyle: "italic" }}>{role}</div>}
+        {isDefined(profession) && (
+          <div style={{ color: themeColors.light.muted, fontStyle: "italic" }}>{profession}</div>
+        )}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>{children}</div>
     </div>

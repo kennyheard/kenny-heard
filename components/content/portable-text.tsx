@@ -36,7 +36,7 @@ export const variants = tv({
     type: {
       body: "font-body text-foreground gap-8",
       note: "text-muted gap-6 font-serif text-base/relaxed font-light italic",
-      role: "text-muted italic",
+      profession: "text-muted italic",
     },
   },
   defaultVariants: {
@@ -79,8 +79,8 @@ const components: PortableTextComponents = {
   unknownMark: ({ children }) => <>{children}</>,
 };
 
-/** Components for the role under the name in the header, whose links only change colour on hover. */
-const roleComponents: PortableTextComponents = {
+/** Components for the profession under the name in the header, whose links only change colour on hover. */
+const professionComponents: PortableTextComponents = {
   ...components,
   marks: {
     ...components.marks,
@@ -95,7 +95,7 @@ const roleComponents: PortableTextComponents = {
 export function PortableText({ value, type, className, ...props }: PortableTextProps) {
   return (
     <div className={variants({ type, className })} {...props}>
-      <PortableTextReact value={value} components={type === "role" ? roleComponents : components} />
+      <PortableTextReact value={value} components={type === "profession" ? professionComponents : components} />
     </div>
   );
 }

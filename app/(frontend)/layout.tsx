@@ -92,9 +92,9 @@ async function CachedHeader({ perspective, stega }: DynamicFetchOptions) {
   "use cache";
 
   const { data: identity } = await sanityFetch({ query: identityQuery, perspective, stega });
-  const { name, role } = identity ?? {};
+  const { name, profession } = identity ?? {};
 
-  return <Header name={name} role={role} />;
+  return <Header name={name} profession={profession} />;
 }
 
 async function DynamicFooter() {

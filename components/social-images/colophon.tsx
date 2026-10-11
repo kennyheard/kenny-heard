@@ -8,9 +8,9 @@ export type ColophonSocialImageProps = Omit<SocialImageFrameProps, "children"> &
   introduction?: string;
 };
 
-export function ColophonSocialImage({ name, role, title, introduction }: ColophonSocialImageProps) {
+export function ColophonSocialImage({ name, profession, title, introduction }: ColophonSocialImageProps) {
   return (
-    <SocialImageFrame name={name} role={role}>
+    <SocialImageFrame name={name} profession={profession}>
       <div style={socialImageText.title}>{title}</div>
       {isDefined(introduction) && <div style={socialImageText.introduction}>{introduction}</div>}
     </SocialImageFrame>
