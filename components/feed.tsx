@@ -28,9 +28,16 @@ export function Feed({ entries, pageSize, initialCount, children }: FeedProps) {
     isDefined(children),
   );
 
+  const showMoreButton = canShowMore && (
+    <Button onPress={showMore}>
+      <Icon icon={IconArrowDown} />
+      Show a few more
+    </Button>
+  );
+
   return (
     <>
-      {years.map(({ year, entries: yearEntries }) => (
+      {years.map(({ year, entries: yearEntries }, index) => (
         <Row key={year} label={year}>
           <EntryList>
             {yearEntries.map(({ key, type, icon, title, description, link, href, readingTime, isComingSoon }) => {
@@ -52,6 +59,7 @@ export function Feed({ entries, pageSize, initialCount, children }: FeedProps) {
                 />
               );
             })}
+            {index === years.length - 1 && showMoreButton}
           </EntryList>
         </Row>
       ))}
@@ -60,14 +68,7 @@ export function Feed({ entries, pageSize, initialCount, children }: FeedProps) {
           {children}
         </div>
       )}
-      {canShowMore && (
-        <Row>
-          <Button onPress={showMore}>
-            <Icon icon={IconArrowDown} />
-            Show a few more
-          </Button>
-        </Row>
-      )}
+      {!isDefined(years) && canShowMore && <Row>{showMoreButton}</Row>}
     </>
   );
 }
