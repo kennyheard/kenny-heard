@@ -50,9 +50,11 @@ export default async function FrontendLayout({ children }: LayoutProps<"/">) {
     >
       <head>{themeScriptElement}</head>
       <body id="top" className="text-foreground font-sans">
-        <Link as="button" href="#main" className="fixed top-0 left-4 z-100 -translate-y-full focus:translate-y-4">
-          Skip to content
-        </Link>
+        <div className="sr-only focus-within:not-sr-only focus-within:fixed focus-within:top-4 focus-within:left-4 focus-within:z-100">
+          <Link as="button" href="#main">
+            Skip to content
+          </Link>
+        </div>
         <Providers>
           <div className="flex min-h-dvh flex-col px-8 py-12 md:py-16">
             {isDraftMode ? (
