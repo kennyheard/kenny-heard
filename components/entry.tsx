@@ -50,7 +50,8 @@ export function Entry({
         )}
         {isComingSoon && (
           <span className="font-meta text-muted ml-2">
-            <span className="sr-only">Coming </span>Soon
+            <span aria-hidden="true">Soon</span>
+            <span className="sr-only"> (coming soon)</span>
           </span>
         )}
       </h3>
