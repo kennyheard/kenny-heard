@@ -1,3 +1,5 @@
+import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
+
 import { linkFragment, routeParamsFragment } from "@/config/links";
 import type { SanityFeedItem } from "@/lib/feed";
 import {
@@ -73,4 +75,12 @@ export const identityQuery = defineTypedQuery<Pick<SanitySettings, "name" | "pro
 /** Site-wide SEO settings. */
 export const settingsQuery = defineTypedQuery<SanitySeoSettings>(
   `*[_type == "settings"][0] { ${seoSettingsFragment} }`,
+);
+
+/** Icon for the social preview image of the singleton of type `$type`. */
+export const singletonSeoIconQuery = defineTypedQuery<SanityIcon>(`*[_type == $type][0].seoIcon`);
+
+/** Icon for the social preview image of the article matching `$slug`. */
+export const articleSeoIconQuery = defineTypedQuery<SanityIcon>(
+  `*[_type == "article" && slug.current == $slug][0].seoIcon`,
 );
