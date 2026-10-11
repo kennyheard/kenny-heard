@@ -7,7 +7,8 @@ import { Introduction } from "@/components/introduction";
 import { Row } from "@/components/row";
 import { RowList } from "@/components/row-list";
 import { Section } from "@/components/section";
-import { toFeedEntry } from "@/lib/feed";
+import { feedPageSize } from "@/config/feed";
+import { getFirstPageCount, toFeedEntry } from "@/lib/feed";
 import type { SanityFeedItem } from "@/lib/feed";
 import { isDefined } from "@/lib/utils";
 import { defaultDocumentTitle } from "@/sanity/config/defaults";
@@ -18,9 +19,6 @@ export interface HomeDocumentProps {
   document: Nullable<SanityHome>;
   feed: Nullable<SanityFeedItem[]>;
 }
-
-/** Number of items on each page of the feed, counting the current work above it on the first. */
-const feedPageSize = 6;
 
 export function HomeDocument({ document, feed }: HomeDocumentProps) {
   const { title = defaultDocumentTitle, introduction, now, endNote } = document ?? {};
@@ -45,7 +43,7 @@ export function HomeDocument({ document, feed }: HomeDocumentProps) {
             <Feed
               entries={feed?.map((item) => toFeedEntry(item)) ?? []}
               pageSize={feedPageSize}
-              initialCount={Math.max(feedPageSize - (now?.length ?? 0), 0)}
+              initialCount={getFirstPageCount(now?.length ?? 0)}
             >
               {isDefined([heading, body]) && (
                 <Row label="Before" className="md:mt-8">

@@ -2,6 +2,7 @@ import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
 import type { SanityLink, SanityLinkRouteParams } from "@driftime/sanity-plugin-link/render";
 import { stegaClean } from "next-sanity";
 
+import { feedPageSize } from "@/config/feed";
 import { resolveRoute } from "@/config/links";
 import { formatReadingTime, getReadingMinutes } from "@/lib/portable-text";
 import { isDefined } from "@/lib/utils";
@@ -89,4 +90,23 @@ export function groupByYear(entries: FeedEntry[]) {
   }
 
   return groups;
+}
+
+/**
+ * Works out how many entries the feed's first page shows, once the items above it have taken their share.
+ *
+ * @param itemsAbove - Number of items shown above the feed on its first page.
+ * @returns The number of entries.
+ */
+export function getFirstPageCount(itemsAbove: number) {
+  return Math.max(feedPageSize - itemsAbove, 0);
+}
+
+/**
+ * Moves focus to whatever the feed has just revealed, so keyboard and screen reader users carry on from it.
+ *
+ * @param node - The revealed element, or null when it unmounts.
+ */
+export function focusRevealed(node: HTMLDivElement | null) {
+  node?.focus();
 }
