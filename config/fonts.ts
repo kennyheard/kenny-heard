@@ -23,11 +23,12 @@ export const timelessSerif = localFont({
   adjustFontFallback: "Times New Roman",
 });
 
-/** Geist Mono in regular, medium, and medium italic, as a CSS variable for the theme. */
+/** Geist Mono in regular and medium, with their italics, as a CSS variable for the theme. */
 export const geistMono = localFont({
   src: [
     { path: "../app/fonts/GeistMono-Regular.woff2", weight: "400", style: "normal" },
     { path: "../app/fonts/GeistMono-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../app/fonts/GeistMono-RegularItalic.woff2", weight: "400", style: "italic" },
     { path: "../app/fonts/GeistMono-MediumItalic.woff2", weight: "500", style: "italic" },
   ],
   variable: "--font-geist-mono",
