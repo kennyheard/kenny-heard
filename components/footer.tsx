@@ -36,7 +36,7 @@ export function Footer({ menu, social, className, ...props }: FooterProps) {
           <div className="flex gap-6">
             {social.map(({ _key, link, icon }) => (
               <Link key={_key} link={link} as="button" theme="icon" aria-label={stegaClean(link?.label)}>
-                <Icon icon={icon} size="1rem" tone="inherit" />
+                <Icon icon={icon} />
               </Link>
             ))}
           </div>

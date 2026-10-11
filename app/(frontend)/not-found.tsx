@@ -18,7 +18,7 @@ export default function NotFound() {
             </p>
             <div className="flex flex-wrap gap-6">
               <Link as="button" href="/">
-                <Icon icon={IconArrowLeft} size="1rem" tone="inherit" />
+                <Icon icon={IconArrowLeft} />
                 Back to the home page
               </Link>
             </div>

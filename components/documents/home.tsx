@@ -3,6 +3,7 @@ import { PortableText } from "@/components/content/portable-text";
 import { Entry } from "@/components/entry";
 import { EntryList } from "@/components/entry-list";
 import { Feed } from "@/components/feed";
+import { Introduction } from "@/components/introduction";
 import { Row } from "@/components/row";
 import { RowList } from "@/components/row-list";
 import { Section } from "@/components/section";
@@ -28,13 +29,7 @@ export function HomeDocument({ document, feed }: HomeDocumentProps) {
   return (
     <>
       <h1 className="sr-only">{title}</h1>
-      {isDefined(introduction) && (
-        <Section type="introduction">
-          <Container>
-            <p className="font-intro text-muted max-w-110 text-pretty">{introduction}</p>
-          </Container>
-        </Section>
-      )}
+      {isDefined(introduction) && <Introduction>{introduction}</Introduction>}
       <Section>
         <Container>
           <RowList>

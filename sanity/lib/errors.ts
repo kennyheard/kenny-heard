@@ -1,15 +1,14 @@
 "use client";
 
 import { isCorsOriginError } from "next-sanity/live";
-import { toast } from "sonner";
 
 /**
- * Reports a Sanity Live error in the console and as a toast.
+ * Shows a Sanity Live error as a toast, loading the toast library only when there's an error to show.
  *
  * @param error - The error.
  */
-export function handleSanityLiveError(error: unknown) {
-  console.error(error);
+async function showErrorToast(error: unknown) {
+  const { toast } = await import("sonner");
 
   if (isCorsOriginError(error)) {
     const { addOriginUrl } = error;
@@ -35,4 +34,14 @@ export function handleSanityLiveError(error: unknown) {
       duration: Infinity,
     });
   }
+}
+
+/**
+ * Reports a Sanity Live error in the console and as a toast.
+ *
+ * @param error - The error.
+ */
+export function handleSanityLiveError(error: unknown) {
+  console.error(error);
+  void showErrorToast(error);
 }

@@ -40,9 +40,7 @@ export function Entry({
   return (
     <div className={variants({ className })} {...props}>
       <h3 className={cn("font-title text-balance", isComingSoon ? "text-muted" : "text-foreground")}>
-        {isDefined(icon) && (
-          <Icon icon={icon} size="1rem" className="mr-2 inline -translate-y-[calc((1cap-1ex)/2)] align-middle" />
-        )}
+        {isDefined(icon) && <Icon icon={icon} tone="muted" inline className="mr-2" />}
         {isLinked ? (
           <Link {...(isDefined(link) ? { link } : { href })} intent="standalone">
             {title}

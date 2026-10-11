@@ -43,11 +43,11 @@ export function ThemeToggle(props: ThemeToggleProps) {
   return (
     <Button theme="icon" onPress={toggleTheme} {...props}>
       <span className="dark:hidden">
-        <Icon icon={IconMoon} size="1rem" tone="inherit" />
+        <Icon icon={IconMoon} />
         <span className="sr-only">Switch to dark mode</span>
       </span>
       <span className="hidden dark:block">
-        <Icon icon={IconSun} size="1rem" tone="inherit" />
+        <Icon icon={IconSun} />
         <span className="sr-only">Switch to light mode</span>
       </span>
     </Button>

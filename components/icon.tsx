@@ -23,13 +23,16 @@ export const variants = tv({
       faint: "text-faint",
       inherit: "",
     },
+    inline: {
+      true: "inline -translate-y-[calc((1cap-1ex)/2)] align-middle",
+    },
   },
   defaultVariants: {
-    tone: "muted",
+    tone: "inherit",
   },
 });
 
-export function Icon({ icon, size, tone, className, ...props }: IconProps) {
+export function Icon({ icon, size, tone, inline, className, ...props }: IconProps) {
   const resolvedSize = size ?? defaultIconProps.size;
 
   if (isSanityIcon(icon)) {
@@ -40,7 +43,7 @@ export function Icon({ icon, size, tone, className, ...props }: IconProps) {
         height={resolvedSize}
         strokeWidth={defaultIconProps.strokeWidth}
         aria-hidden
-        className={variants({ tone, className })}
+        className={variants({ tone, inline, className })}
         {...props}
       />
     );
@@ -55,7 +58,7 @@ export function Icon({ icon, size, tone, className, ...props }: IconProps) {
       size={resolvedSize}
       strokeWidth={defaultIconProps.strokeWidth}
       aria-hidden
-      className={variants({ tone, className })}
+      className={variants({ tone, inline, className })}
       {...props}
     />
   );

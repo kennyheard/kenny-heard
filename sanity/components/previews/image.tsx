@@ -6,7 +6,8 @@ import Image from "next/image";
 
 import { buildImageUrl } from "@/lib/images";
 import { isDefined } from "@/lib/utils";
-import { BlockPreviewFrame, createBlockPreview, isBlockOf } from "@/sanity/components/previews/frame";
+import { BlockPreviewFrame } from "@/sanity/components/previews/frame";
+import { createBlockPreview, isBlockOf } from "@/sanity/lib/blocks";
 import type { SanityAccessibleImage } from "@/sanity/schemas/types/accessible-image";
 
 export interface ImagePreviewProps {

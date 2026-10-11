@@ -129,11 +129,7 @@ export function Link({
           {composedChildren ?? resolvedLink?.label}
           {opensNewTab && <span className="sr-only"> (opens in a new tab)</span>}
           {isDefined(glyph) && (
-            <Icon
-              icon={glyph}
-              tone={isMuted ? "inherit" : "muted"}
-              className="ml-0.5 inline -translate-y-[calc((1cap-1ex)/2)] align-middle"
-            />
+            <Icon icon={glyph} size="0.75em" tone={isMuted ? "inherit" : "muted"} inline className="ml-0.5" />
           )}
         </>
       ))}

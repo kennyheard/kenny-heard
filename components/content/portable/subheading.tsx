@@ -25,7 +25,7 @@ export function PortableSubheading({ id, className, children, ...props }: Portab
         aria-label="Link to this section"
         className="group-hocus:opacity-100 ml-2 inline-flex align-middle opacity-0"
       >
-        <Icon icon={IconChainLink1} size="0.75rem" tone="inherit" />
+        <Icon icon={IconChainLink1} size="0.75rem" />
       </Link>
     </h2>
   );

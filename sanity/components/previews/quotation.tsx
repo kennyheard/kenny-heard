@@ -3,7 +3,8 @@
 import { Box, Stack, Text } from "@sanity/ui";
 
 import { isDefined } from "@/lib/utils";
-import { BlockPreviewFrame, createBlockPreview, isBlockOf } from "@/sanity/components/previews/frame";
+import { BlockPreviewFrame } from "@/sanity/components/previews/frame";
+import { createBlockPreview, isBlockOf } from "@/sanity/lib/blocks";
 import type { SanityQuotation } from "@/sanity/schemas/blocks/quotation";
 
 export interface QuotationPreviewProps {

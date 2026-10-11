@@ -78,7 +78,7 @@ export function Feed({ entries, pageSize, initialCount, children }: FeedProps) {
       {canShowMore && (
         <Row>
           <Button onPress={handleShowMore}>
-            <Icon icon={IconArrowDown} size="1rem" tone="inherit" />
+            <Icon icon={IconArrowDown} />
             Show a few more
           </Button>
         </Row>

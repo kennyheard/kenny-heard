@@ -3,7 +3,8 @@
 import { Flex, Stack, Text } from "@sanity/ui";
 
 import { isDefined } from "@/lib/utils";
-import { BlockPreviewFrame, createBlockPreview, isBlockOf } from "@/sanity/components/previews/frame";
+import { BlockPreviewFrame } from "@/sanity/components/previews/frame";
+import { createBlockPreview, isBlockOf } from "@/sanity/lib/blocks";
 import type { SanityDefinition } from "@/sanity/schemas/blocks/definition";
 
 export interface DefinitionPreviewProps {

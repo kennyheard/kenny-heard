@@ -37,7 +37,7 @@ export function ArticleDocument({ document }: ArticleDocumentProps) {
           <footer className="flex items-center justify-between gap-6">
             <ShareButton title={stegaClean(title)} />
             <Link as="button" href="#top">
-              <Icon icon={IconArrowUp} size="1rem" tone="inherit" />
+              <Icon icon={IconArrowUp} />
               Top
             </Link>
           </footer>

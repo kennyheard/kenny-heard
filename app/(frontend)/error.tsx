@@ -31,11 +31,11 @@ export default function Error({ error, unstable_retry }: ErrorProps) {
             </p>
             <div className="flex flex-wrap gap-6">
               <Link as="button" href="/">
-                <Icon icon={IconArrowLeft} size="1rem" tone="inherit" />
+                <Icon icon={IconArrowLeft} />
                 Back to the home page
               </Link>
               <Button onPress={unstable_retry}>
-                <Icon icon={IconArrowRotateClockwise} size="1rem" tone="inherit" />
+                <Icon icon={IconArrowRotateClockwise} />
                 Try again
               </Button>
             </div>

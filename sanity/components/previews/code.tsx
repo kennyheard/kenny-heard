@@ -3,7 +3,8 @@
 import { Box, Text, useTheme } from "@sanity/ui";
 
 import { isDefined } from "@/lib/utils";
-import { BlockPreviewFrame, createBlockPreview, isBlockOf } from "@/sanity/components/previews/frame";
+import { BlockPreviewFrame } from "@/sanity/components/previews/frame";
+import { createBlockPreview, isBlockOf } from "@/sanity/lib/blocks";
 import type { SanityCode } from "@/sanity/schemas/blocks/code";
 
 export interface CodePreviewProps {
