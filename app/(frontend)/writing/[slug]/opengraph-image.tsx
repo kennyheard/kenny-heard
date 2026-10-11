@@ -15,6 +15,7 @@ export const alt = site.name;
 export const contentType = "image/png";
 
 export { socialImageSize as size } from "@/lib/social-image";
+export { generateStaticParams } from "@/app/(frontend)/writing/[slug]/page";
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const [identity, { data: article }] = await Promise.all([
