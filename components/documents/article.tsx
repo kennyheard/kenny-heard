@@ -25,15 +25,17 @@ export function ArticleDocument({ document }: ArticleDocumentProps) {
   return (
     <Section>
       <Container>
-        <article className="flex flex-col gap-8 md:gap-12">
-          <header className="flex flex-col gap-3">
-            <h1 className="font-heading text-balance">{title}</h1>
-            <p className="font-meta text-muted flex flex-wrap gap-x-6 gap-y-3">
-              {isDefined(date) && <time dateTime={stegaClean(date)}>{getDatestamp(stegaClean(date))}</time>}
-              {isDefined(minutes) && <span>{formatReadingTime(minutes)}</span>}
-            </p>
-          </header>
-          {isDefined(body) && <PortableText value={body} />}
+        <article className="flex flex-col gap-12 md:gap-16">
+          <div className="flex flex-col gap-8 md:gap-12">
+            <header className="flex flex-col gap-3">
+              <h1 className="font-heading text-balance">{title}</h1>
+              <p className="font-meta text-muted flex flex-wrap gap-x-6 gap-y-3">
+                {isDefined(date) && <time dateTime={stegaClean(date)}>{getDatestamp(stegaClean(date))}</time>}
+                {isDefined(minutes) && <span>{formatReadingTime(minutes)}</span>}
+              </p>
+            </header>
+            {isDefined(body) && <PortableText value={body} />}
+          </div>
           <footer className="flex items-center justify-between gap-6">
             <ShareButton title={stegaClean(title)} />
             <Link as="button" href="#top">
