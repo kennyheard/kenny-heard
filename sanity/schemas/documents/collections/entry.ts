@@ -57,7 +57,7 @@ export const entry = defineType({
     },
   },
   fields: [
-    { ...iconField, group: "content" satisfies DocumentGroup },
+    { ...iconField, group: "content" satisfies DocumentGroup, initialValue: { name: "compass-round" } },
     defineField({
       name: "title" satisfies keyof SanityEntry,
       type: "string",

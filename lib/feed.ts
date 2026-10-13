@@ -10,8 +10,11 @@ import type { SanityArticle } from "@/sanity/schemas/documents/collections/artic
 import type { SanityEntry } from "@/sanity/schemas/documents/collections/entry";
 
 /** Article or entry as the home page's feed fetches it, with only the fields it shows and an article's text for its reading time. */
-export type SanityFeedItem = Pick<SanityArticle | SanityEntry, "_id" | "_type" | "title" | "description" | "date"> &
-  Pick<SanityEntry, "icon" | "link" | "comingSoon"> &
+export type SanityFeedItem = Pick<
+  SanityArticle | SanityEntry,
+  "_id" | "_type" | "icon" | "title" | "description" | "date"
+> &
+  Pick<SanityEntry, "link" | "comingSoon"> &
   Pick<SanityArticle, "body"> & {
     /** Route parameter values, present on articles. */
     _routeParams?: SanityLinkRouteParams;
@@ -23,7 +26,7 @@ export interface FeedEntry {
   key: string;
   /** Kind of document the item comes from. */
   type: SanityFeedItem["_type"];
-  /** Icon chosen for an entry, or undefined for an article. */
+  /** Icon shown before the title, marking what kind of thing it is. */
   icon?: SanityIcon;
   /** Title shown in the feed. */
   title?: string;

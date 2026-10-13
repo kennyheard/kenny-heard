@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowDown, IconFeather } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconArrowDown } from "@central-icons-react/round-outlined-radius-2-stroke-1";
 import type { ReactNode } from "react";
 
 import { Button } from "@/components/button";
@@ -8,6 +8,7 @@ import { Entry } from "@/components/entry";
 import { EntryList } from "@/components/entry-list";
 import { Icon } from "@/components/icon";
 import { Row } from "@/components/row";
+import { fallbackFeedIcons } from "@/config/feed";
 import { useFeedPages } from "@/hooks/use-feed-pages";
 import { focusRevealed } from "@/lib/feed";
 import type { FeedEntry } from "@/lib/feed";
@@ -48,7 +49,7 @@ export function Feed({ entries, pageSize, initialCount, children }: FeedProps) {
                   key={key}
                   ref={isFirstRevealed ? focusRevealed : undefined}
                   tabIndex={isFirstRevealed ? -1 : undefined}
-                  icon={type === "article" ? IconFeather : icon}
+                  icon={icon ?? fallbackFeedIcons[type]}
                   title={title}
                   description={description}
                   link={link}

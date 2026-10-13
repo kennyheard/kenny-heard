@@ -1,6 +1,8 @@
 import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
 import { defineField } from "sanity";
 
+import { iconFieldNames } from "@/config/icons";
+
 export interface SanityIconField {
   icon?: SanityIcon;
 }
@@ -12,7 +14,7 @@ export const iconField = defineField({
   options: {
     library: "central",
     style: "round-outlined-radius-2-stroke-1",
-    icons: ["compass-round", "feather", "code-brackets", "microphone"],
+    icons: iconFieldNames,
   },
   validation: (rule) => rule.required(),
 });
