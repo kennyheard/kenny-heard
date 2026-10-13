@@ -77,10 +77,10 @@ export const settingsQuery = defineTypedQuery<SanitySeoSettings>(
   `*[_type == "settings"][0] { ${seoSettingsFragment} }`,
 );
 
-/** Icon for the social preview image of the singleton of type `$type`. */
+/** Icon chosen for the social preview image of the singleton of type `$type`. */
 export const singletonSeoIconQuery = defineTypedQuery<SanityIcon>(`*[_type == $type][0].seoIcon`);
 
-/** Icon for the social preview image of the article matching `$slug`. */
-export const articleSeoIconQuery = defineTypedQuery<SanityIcon>(
-  `*[_type == "article" && slug.current == $slug][0].seoIcon`,
+/** Feed icon and social preview icon of the article matching `$slug`. */
+export const articleIconsQuery = defineTypedQuery<Pick<SanityArticle, "icon" | "seoIcon">>(
+  `*[_type == "article" && slug.current == $slug][0] { icon, seoIcon }`,
 );

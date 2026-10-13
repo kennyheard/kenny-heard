@@ -9,7 +9,7 @@ export const darkSchemeQuery = "(prefers-color-scheme: dark)";
 
 /** Colours in each mode, written out for what can't read the stylesheet: the manifest, browser toolbars, and social images. */
 export const themeColors = {
-  light: { background: "#fafafa", muted: "#71717b" },
+  light: { background: "#fafafa" },
   dark: { background: "#18181b" },
 };
 

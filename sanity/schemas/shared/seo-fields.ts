@@ -1,6 +1,7 @@
 import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
 import { defineField } from "sanity";
 
+import { socialImageIconStyle } from "@/config/icons";
 import type { DocumentGroup } from "@/sanity/config/groups";
 
 export interface SanitySeoFields {
@@ -29,8 +30,8 @@ export const seoFields = [
     type: "icon",
     title: "SEO Icon",
     group: "seo" satisfies DocumentGroup,
-    description: "Icon shown alone in the middle of the page's social preview image.",
-    options: { library: "central", style: "round-outlined-radius-2-stroke-1" },
-    validation: (rule) => rule.required(),
+    description:
+      "Icon drawn as a metal sign on a wall in the page's social preview image, if different from the page's own icon. Choose a bold shape without fine details.",
+    options: { library: "central", style: socialImageIconStyle },
   }),
 ];

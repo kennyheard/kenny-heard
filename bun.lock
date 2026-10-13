@@ -8,7 +8,7 @@
         "@central-icons-react/round-filled-radius-2-stroke-1": "1.2.10",
         "@central-icons-react/round-outlined-radius-2-stroke-1": "1.2.10",
         "@central-icons-react/round-outlined-radius-2-stroke-1.5": "1.2.10",
-        "@driftime/sanity-plugin-icon": "0.4.1",
+        "@driftime/sanity-plugin-icon": "0.5.0",
         "@driftime/sanity-plugin-link": "0.2.1",
         "@portabletext/react": "8.0.1",
         "@sanity/asset-utils": "2.3.0",
@@ -22,6 +22,7 @@
         "react-dom": "19.3.0",
         "sanity": "6.18.0",
         "server-only": "0.0.1",
+        "sharp": "0.35.5",
         "shiki": "4.5.0",
         "sonner": "2.0.8",
         "tailwind-variants": "3.3.1",
@@ -312,7 +313,7 @@
 
     "@dnd-kit/utilities": ["@dnd-kit/utilities@3.2.2", "", { "dependencies": { "tslib": "^2.0.0" }, "peerDependencies": { "react": ">=16.8.0" } }, "sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg=="],
 
-    "@driftime/sanity-plugin-icon": ["@driftime/sanity-plugin-icon@0.4.1", "", { "dependencies": { "@sanity/client": "^7.26.2 || ^8.0.0", "@sanity/icons": "^5.2.1", "@sanity/ui": "^4.0.3", "svgo": "^4.1.0" }, "peerDependencies": { "react": "19", "sanity": "^6.10.0" } }, "sha512-yyVsOnauRvKrvvdOjJDPmiag5hyHL3vrXQb1QeDo34URG8bOsQjfCo2X306mvex2NqVjIphMKgT0Wl+dE0YZBA=="],
+    "@driftime/sanity-plugin-icon": ["@driftime/sanity-plugin-icon@0.5.0", "", { "dependencies": { "@sanity/client": "^7.26.2 || ^8.0.0", "@sanity/icons": "^5.2.1", "@sanity/ui": "^4.0.3", "svgo": "^4.1.0" }, "peerDependencies": { "react": "19", "sanity": "^6.10.0" } }, "sha512-h3zffS1dFCxJn5KoC97/dC2t7EXTiBlcguvzmdGKckScGrQxJPBqCxEhgXqVGdj5tiYXWxhAfa7e0dPudIG+2g=="],
 
     "@driftime/sanity-plugin-link": ["@driftime/sanity-plugin-link@0.2.1", "", { "dependencies": { "@portabletext/editor": "^8.1.3", "@portabletext/html": "^2.0.0", "@sanity/client": "^7.26.2 || ^8.0.0", "@sanity/icons": "^5.2.1", "@sanity/ui": "^4.0.3", "@sanity/util": "^6.13.2" }, "peerDependencies": { "react": "19", "sanity": "^6.10.0" } }, "sha512-sk4IdrmJzCrM2k72Iu8G75NiOh+bIpAEN3LV4sx/EKAKeX8PR1VijzL8RTLAvfnpYdVvmynEsImNkjG2w7/2MQ=="],
 
