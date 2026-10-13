@@ -1,4 +1,4 @@
-import { IconCompassRound, IconGlobe } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconCompassRound, IconGlobe } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { createIconPreview } from "@driftime/sanity-plugin-icon";
 import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
 import type { SanityLink } from "@driftime/sanity-plugin-link/render";

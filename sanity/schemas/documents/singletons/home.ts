@@ -1,4 +1,4 @@
-import { IconHome, IconProgressArc } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconHomeOpen, IconProgressArc } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { createIconPreview } from "@driftime/sanity-plugin-icon";
 import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
 import { defineArrayMember, defineField, defineType } from "sanity";
@@ -38,7 +38,7 @@ export const home = defineType({
   name: "home" satisfies SanityHome["_type"],
   type: "document",
   title: "Home",
-  icon: createSanityIcon(IconHome),
+  icon: createSanityIcon(IconHomeOpen),
   description: "Landing page of the site, with the feed of articles and entries.",
   groups: defineDocumentGroups({ defaultGroup: "content" }),
   preview: {

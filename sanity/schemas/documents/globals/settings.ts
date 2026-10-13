@@ -1,4 +1,4 @@
-import { IconSettingsToggle1 } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconSettingsToggle1 } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { defineField, defineType } from "sanity";
 import type { SanityDocument } from "sanity";
 

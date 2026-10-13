@@ -1,4 +1,4 @@
-import { IconImages1 } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconImages1 } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import type { ReactNode } from "react";
 import { defineField, defineType } from "sanity";
 

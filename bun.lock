@@ -7,6 +7,7 @@
       "dependencies": {
         "@central-icons-react/round-filled-radius-2-stroke-1": "1.2.10",
         "@central-icons-react/round-outlined-radius-2-stroke-1": "1.2.10",
+        "@central-icons-react/round-outlined-radius-2-stroke-1.5": "1.2.10",
         "@driftime/sanity-plugin-icon": "0.4.1",
         "@driftime/sanity-plugin-link": "0.2.1",
         "@portabletext/react": "8.0.1",
@@ -40,6 +41,7 @@
     },
   },
   "trustedDependencies": [
+    "@central-icons-react/round-outlined-radius-2-stroke-1.5",
     "@central-icons-react/round-filled-radius-2-stroke-1",
     "@central-icons-react/round-outlined-radius-2-stroke-1",
   ],
@@ -281,6 +283,8 @@
     "@central-icons-react/round-filled-radius-2-stroke-1": ["@central-icons-react/round-filled-radius-2-stroke-1@1.2.10", "", { "peerDependencies": { "react": ">=16.6.0 <20" } }, "sha512-Qc0bYhqRinOyHFuxQE0Ywt9VA/wTHkPTOHvh0Hu4vMGZ+WBZPLokMDDNAj+aqO5F2l62n7u1QwhmqXe/oTZ2Bg=="],
 
     "@central-icons-react/round-outlined-radius-2-stroke-1": ["@central-icons-react/round-outlined-radius-2-stroke-1@1.2.10", "", { "peerDependencies": { "react": ">=16.6.0 <20" } }, "sha512-Z4uWUbXERjSYwo3ksMfMUlruPZCHeCmwqKuwHIbqzt9icS/h+7Y7cBN1Ia1OkwfvtbZ08S8F0GxJdEaxU0/NnA=="],
+
+    "@central-icons-react/round-outlined-radius-2-stroke-1.5": ["@central-icons-react/round-outlined-radius-2-stroke-1.5@1.2.10", "", { "peerDependencies": { "react": ">=16.6.0 <20" } }, "sha512-W1oSgdJ71H5H0hhaJBXExQTjPag120ItasZcWWK80IsYFKQcmxGOobYLJsrDJ3v5Go6DL3d6bXi1fGHYXjtZMg=="],
 
     "@csstools/color-helpers": ["@csstools/color-helpers@6.1.2", "", {}, "sha512-grhRy3OKmniaAEKXMjua5z/EODX0MSqBGjunw8+j/3HQjOnahs2AGhvEOIYVUWcU6ScApbhLhVrQTX8XqrMrow=="],
 

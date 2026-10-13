@@ -4,4 +4,4 @@ import type { CentralIconBaseProps } from "@central-icons-react/round-outlined-r
 export const defaultIconProps: CentralIconBaseProps = { size: "1rem", strokeWidth: 1 };
 
 /** Default props for icons in the Studio. */
-export const defaultSanityIconProps: CentralIconBaseProps = { size: "1em", strokeWidth: 1.5 };
+export const defaultSanityIconProps: CentralIconBaseProps = { size: "1em" };

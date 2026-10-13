@@ -1,4 +1,4 @@
-import { IconShapesPlusXSquareCircle } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconShapesPlusXSquareCircle } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import type { DocumentDefinition } from "sanity";
 import type { StructureResolver } from "sanity/structure";
 

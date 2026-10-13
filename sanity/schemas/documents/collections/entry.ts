@@ -1,4 +1,4 @@
-import { IconDirection2 } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconTasks } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { createIconPreview } from "@driftime/sanity-plugin-icon";
 import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
 import type { SanityLink } from "@driftime/sanity-plugin-link/render";
@@ -28,7 +28,7 @@ export const entry = defineType({
   name: "entry" satisfies SanityEntry["_type"],
   type: "document",
   title: "Entries",
-  icon: createSanityIcon(IconDirection2),
+  icon: createSanityIcon(IconTasks),
   description:
     "Things in the home page's feed that live elsewhere, such as work, side projects, and writing on other sites.",
   groups: defineDocumentGroups({ defaultGroup: "content" }),

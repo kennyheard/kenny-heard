@@ -1,4 +1,4 @@
-import { IconNewspaper } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconFeather } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { defineField, defineType } from "sanity";
 import type { SanityDocument } from "sanity";
 
@@ -26,7 +26,7 @@ export const article = defineType({
   name: "article" satisfies SanityArticle["_type"],
   type: "document",
   title: "Articles",
-  icon: createSanityIcon(IconNewspaper),
+  icon: createSanityIcon(IconFeather),
   description: "Writing, listed in the home page's feed with everything else.",
   groups: defineDocumentGroups({ defaultGroup: "content" }),
   orderings: [

@@ -7,7 +7,7 @@ import {
   IconPencilLine,
   IconSettingsSliderThree,
   IconSettingsToggle1,
-} from "@central-icons-react/round-outlined-radius-2-stroke-1";
+} from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 
 import { defineDocumentGroupConfig } from "@/sanity/lib/groups";
 

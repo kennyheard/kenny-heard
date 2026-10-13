@@ -1,4 +1,4 @@
-import { IconBook } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconBook } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { defineArrayMember, defineField } from "sanity";
 import type { PortableTextObject } from "sanity";
 

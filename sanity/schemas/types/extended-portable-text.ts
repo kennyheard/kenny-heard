@@ -1,4 +1,4 @@
-import { IconParagraph } from "@central-icons-react/round-outlined-radius-2-stroke-1";
+import { IconParagraph } from "@central-icons-react/round-outlined-radius-2-stroke-1.5";
 import { PortableTextLinkPlugins, linkAnnotation } from "@driftime/sanity-plugin-link";
 import { defineArrayMember, defineType } from "sanity";
 import type { PortableTextTextBlock } from "sanity";
