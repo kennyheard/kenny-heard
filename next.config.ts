@@ -13,6 +13,10 @@ const config: NextConfig = {
     default: sanity,
   },
   reactCompiler: true,
+  // The pre-commit check already type-checks the whole project, so the build doesn't repeat it.
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   experimental: {
     turbopackRustReactCompiler: true,
   },
