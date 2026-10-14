@@ -23,9 +23,10 @@
     "check": "oxfmt --check && oxlint",
     "fix": "oxfmt && oxlint --fix",
     "dev": "bun run fonts && next dev",
-    "build": "bun run fonts && next build",
+    "build": "bun run fonts && next build && bun run social-images",
     "start": "next start",
     "fonts": "bun scripts/fonts.ts",
+    "social-images": "bun scripts/social-images.ts",
     "postinstall": "git config core.hooksPath .githooks; next typegen"
   },
   "dependencies": {
