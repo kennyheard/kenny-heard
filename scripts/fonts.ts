@@ -29,7 +29,7 @@ if (!isDefined(process.env.BLOB_STORE_ID)) {
   throw new Error("The fonts are licensed and private, so building the site needs the Blob store's BLOB_STORE_ID.");
 }
 
-const { blobs } = await list();
+const { blobs } = await list({ prefix: "web/" });
 
 await mkdir(fontsFolder, { recursive: true });
 await Promise.all(

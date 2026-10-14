@@ -52,6 +52,10 @@ export interface WallSignSettings {
     reflection: number;
     /** Strength of the highlight along the edges facing the window. */
     rim: number;
+    /** Strength of the lamp's light catching the edges facing it. */
+    glint: number;
+    /** Tint of the lamp's light along the edges. */
+    glintColour: WallColour;
     /** Offset of the sign's shadow from the sign, in pixels. */
     shadowOffset: WallPoint;
     /** Blur radius of the sign's shadow, in pixels. */
@@ -369,6 +373,43 @@ function offsetField(input: Float32Array, width: number, height: number, offset:
 }
 
 /**
+ * Doubles the size of a field, blending smoothly between its values.
+ *
+ * @param input - The field, half the wall's width and height.
+ * @param width - Width of the wall.
+ * @param height - Height of the wall.
+ * @returns The field at the wall's size.
+ */
+function enlarge(input: Float32Array, width: number, height: number) {
+  const inputWidth = width / 2;
+  const inputHeight = height / 2;
+  const output = new Float32Array(width * height);
+
+  for (let y = 0; y < height; y += 1) {
+    const sourceY = Math.min(inputHeight - 1, Math.max(0, (y + 0.5) / 2 - 0.5));
+    const top = Math.floor(sourceY);
+    const bottom = Math.min(inputHeight - 1, top + 1);
+    const easeY = sourceY - top;
+
+    for (let x = 0; x < width; x += 1) {
+      const sourceX = Math.min(inputWidth - 1, Math.max(0, (x + 0.5) / 2 - 0.5));
+      const left = Math.floor(sourceX);
+      const right = Math.min(inputWidth - 1, left + 1);
+      const easeX = sourceX - left;
+      const topLeft = input[top * inputWidth + left] ?? 0;
+      const topRight = input[top * inputWidth + right] ?? 0;
+      const bottomLeft = input[bottom * inputWidth + left] ?? 0;
+      const bottomRight = input[bottom * inputWidth + right] ?? 0;
+      output[y * width + x] =
+        (topLeft + (topRight - topLeft) * easeX) * (1 - easeY) +
+        (bottomLeft + (bottomRight - bottomLeft) * easeX) * easeY;
+    }
+  }
+
+  return output;
+}
+
+/**
  * Finds the transform that maps a point on the wall back onto the window, from the patch of light's four corners.
  *
  * @param corners - Corners of the patch of light.
@@ -419,9 +460,9 @@ function windowTransform(corners: WallSignSettings["light"]["corners"]) {
  */
 function drawSunlight(settings: WallSignSettings["light"], width: number, height: number) {
   const random = createRandom(settings.seed);
-  const wobble = valueNoise(width, height, 130, random);
-  const streak = gaussianBlur(valueNoise(width, height, 110, random), width, height, 20);
-  const edgeNoise = valueNoise(width, height, 45, random);
+  const wobble = valueNoise(width, height, 260, random);
+  const streak = gaussianBlur(valueNoise(width, height, 220, random), width, height, 40);
+  const edgeNoise = valueNoise(width, height, 90, random);
   const { vary } = settings;
   const bands: { start: number; width: number; strength: number }[] = [];
   let position = 0;
@@ -518,7 +559,8 @@ function shadeChannel(channel: number, change: number, light: WallSignSettings["
 }
 
 /**
- * Works out how the sunlight lightens and darkens the plaster wall, both with its texture and as a smooth surface.
+ * Works out how the sunlight lightens and darkens the plaster wall, both with its texture and as a smooth surface. The
+ * texture is drawn at half the wall's size, so its grain stays legible once the image is shown smaller.
  *
  * @param settings - How the wall sign is drawn.
  * @returns How much lighter or darker the textured wall is at each pixel, and the smooth wall.
@@ -527,15 +569,18 @@ function drawWall(settings: WallSignSettings) {
   const { width, height, wall, light } = settings;
   const count = width * height;
   const random = createRandom(wall.seed);
-  const fine = boxBlur(createNoise(count, random), width, height, 1);
-  const grain = valueNoise(width, height, 3.5, random);
-  const mottle = valueNoise(width, height, 80, random);
-  const surface = Float32Array.from(
-    fine,
-    (value, index) => (value + (grain[index] ?? 0) * wall.toothMid) * wall.toothDepth,
+  const textureWidth = width / 2;
+  const textureHeight = height / 2;
+  const fine = boxBlur(createNoise(textureWidth * textureHeight, random), textureWidth, textureHeight, 1);
+  const grain = valueNoise(textureWidth, textureHeight, 7, random);
+  const mottle = valueNoise(width, height, 160, random);
+  const surface = enlarge(
+    Float32Array.from(fine, (value, index) => (value + (grain[index] ?? 0) * wall.toothMid) * wall.toothDepth),
+    width,
+    height,
   );
   const sun = drawSunlight(light, width, height);
-  const glow = gaussianBlur(sun, width, height, 40);
+  const glow = gaussianBlur(sun, width, height, 80);
   const textured = new Float32Array(count);
   const smooth = new Float32Array(count);
 
@@ -546,8 +591,8 @@ function drawWall(settings: WallSignSettings) {
       const right = x < width - 1 ? index + 1 : index;
       const above = y > 0 ? index - width : index;
       const below = y < height - 1 ? index + width : index;
-      const slopeX = ((surface[right] ?? 0) - (surface[left] ?? 0)) * 0.5;
-      const slopeY = ((surface[below] ?? 0) - (surface[above] ?? 0)) * 0.5;
+      const slopeX = (surface[right] ?? 0) - (surface[left] ?? 0);
+      const slopeY = (surface[below] ?? 0) - (surface[above] ?? 0);
       const facing =
         (-slopeX * lightDirection.x - slopeY * lightDirection.y + lightDirection.z) /
         Math.sqrt(slopeX * slopeX + slopeY * slopeY + 1);
@@ -577,7 +622,7 @@ function drawWall(settings: WallSignSettings) {
 function drawDust(settings: WallSignSettings["dust"], light: Float32Array, width: number, height: number) {
   const count = width * height;
   const random = createRandom(settings.seed);
-  const clusters = softBlur(createNoise(count, random), width, height, 40);
+  const clusters = softBlur(createNoise(count, random), width, height, 80);
   const motes = new Float32Array(count);
   let densest = 0;
 
@@ -593,8 +638,8 @@ function drawDust(settings: WallSignSettings["dust"], light: Float32Array, width
 
     const brightness = random();
     const isBlurred = random() < 0.035;
-    const radius = isBlurred ? 4.5 + random() * 6 : 0.275 + random() ** 3 * 0.55;
-    const strength = isBlurred ? 0.005 + random() * 0.008 : 0.07 + brightness ** 5 * 1.3;
+    const radius = isBlurred ? 9 + random() * 12 : 1.2 + random() ** 2 * 1.6;
+    const strength = isBlurred ? 0.005 + random() * 0.008 : 0.03 + brightness ** 3 * 0.22;
     const reach = Math.ceil(radius + 1);
 
     for (let offsetY = -reach; offsetY <= reach; offsetY += 1) {
@@ -653,26 +698,25 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
   const shape = Float32Array.from(mask, (value, index) =>
     clamp((value - 0.5 + (edgeNoise[index] ?? 0) * 0.03) * 3 + 0.5),
   );
-  const bleed = softBlur(shape, width, height, 1);
-  const cover = Float32Array.from(bleed, (value, index) =>
-    clamp((value - 0.42 + (edgeNoise[index] ?? 0) * 0.025) / 0.25),
+  const cover = Float32Array.from(softBlur(shape, width, height, 2), (value, index) =>
+    clamp((value - 0.42 + (edgeNoise[index] ?? 0) * 0.025) / 0.16),
   );
-  const rounded = softBlur(shape, width, height, 2);
+  const rounded = softBlur(shape, width, height, 1);
   const shadow = softBlur(offsetField(shape, width, height, sign.shadowOffset), width, height, sign.shadowSoftness);
   const contact = softBlur(shape, width, height, sign.contactSoftness);
-  const grain = createNoise(count, random);
+  const grain = enlarge(createNoise(count / 4, random), width, height);
 
   const reflected = new Float32Array(count);
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      const sourceX = Math.min(width - 1, Math.max(0, x + 70));
-      const sourceY = Math.min(height - 1, Math.max(0, y - 45));
+      const sourceX = Math.min(width - 1, Math.max(0, x + 140));
+      const sourceY = Math.min(height - 1, Math.max(0, y - 90));
       reflected[y * width + x] = sunlight[sourceY * width + sourceX] ?? 0;
     }
   }
 
-  const reflection = softBlur(reflected, width, height, 5);
+  const reflection = softBlur(reflected, width, height, 9);
 
   const shaft = new Float32Array(count);
 
@@ -681,8 +725,8 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
       let sum = 0;
 
       for (let step = 0; step < 14; step += 1) {
-        const sourceX = x - step * 11;
-        const sourceY = y - step * 15;
+        const sourceX = x - step * 22;
+        const sourceY = y - step * 30;
         if (sourceX < 0 || sourceY < 0) break;
         sum += (sunlight[sourceY * width + sourceX] ?? 0) ** 2 * (1 - step / 14);
       }
@@ -691,13 +735,13 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
     }
   }
 
-  const airGlow = softBlur(shaft, width, height, 12);
+  const airGlow = softBlur(shaft, width, height, 24);
   let strongestGlow = 0;
 
   for (const value of airGlow) strongestGlow = Math.max(strongestGlow, value);
 
-  const roomGlow = softBlur(softBlur(sunlight, width, height, 30), width, height, 30);
-  const nearLight = softBlur(sunlight, width, height, 7);
+  const roomGlow = softBlur(softBlur(sunlight, width, height, 60), width, height, 60);
+  const nearLight = softBlur(sunlight, width, height, 14);
   const motes = drawDust(dust, nearLight, width, height);
   const pixels = new Uint8Array(count * 3);
 
@@ -712,8 +756,8 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
       const lampReach = Math.exp(-((lampDistance / lamp.radius) ** 2));
       const lampGlint = Math.exp(-((lampDistance / (lamp.radius * 1.6)) ** 2));
       const inner = index > width && index < count - width;
-      const slopeX = inner ? ((rounded[index + 1] ?? 0) - (rounded[index - 1] ?? 0)) * 0.25 : 0;
-      const slopeY = inner ? ((rounded[index + width] ?? 0) - (rounded[index - width] ?? 0)) * 0.25 : 0;
+      const slopeX = inner ? ((rounded[index + 1] ?? 0) - (rounded[index - 1] ?? 0)) * 0.5 : 0;
+      const slopeY = inner ? ((rounded[index + width] ?? 0) - (rounded[index - width] ?? 0)) * 0.5 : 0;
       const towardsLamp = Math.max(
         0,
         -(slopeX * (lamp.position.x - x) + slopeY * (lamp.position.y - y)) / (lampDistance || 1),
@@ -750,7 +794,13 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
         const sheen =
           sunReach ** sign.sheenFocus * sign.sheen * sunColour +
           lampReach ** 3 * sign.lampSheen * (lamp.colour[channel] ?? 0);
-        const glint = towardsLamp * 9 * lamp.strength * (lamp.colour[channel] ?? 0) * lampGlint;
+        const glint =
+          towardsLamp *
+          sign.glint *
+          lamp.strength *
+          (lamp.colour[channel] ?? 0) *
+          (sign.glintColour[channel] ?? 0) *
+          lampGlint;
         const rim = towardsWindow * sign.rim * sunReach * sunColour;
         let value = plaster * wallLight * (1 - coverage) + (metal * metalLight + sheen + glint + rim) * coverage;
         value += (airGlow[index] ?? 0) * 0.06 * (airGlowColour[channel] ?? 0);
