@@ -23,10 +23,10 @@
     "check": "oxfmt --check && oxlint",
     "fix": "oxfmt && oxlint --fix",
     "dev": "bun run fonts && next dev",
-    "build": "next typegen && bun run fonts && bun run check && next build",
+    "build": "bun run fonts && next build",
     "start": "next start",
     "fonts": "bun scripts/fonts.ts",
-    "postinstall": "next typegen"
+    "postinstall": "git config core.hooksPath .githooks; next typegen"
   },
   "dependencies": {
     "@central-icons-react/round-filled-radius-2-stroke-1": "1.2.10",
