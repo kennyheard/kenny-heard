@@ -38,7 +38,7 @@ export const contentTag = "content";
 /** Sanity Live instance that fetches content and keeps it up to date. */
 const live = defineLive({ client, serverToken: token, browserToken: token, strict: true });
 
-/** Component that refreshes the page when its content changes, only rendered in draft mode. */
+/** Component that refreshes the page when its content changes, rendered in draft mode and in local development. */
 export const { SanityLive } = live;
 
 /**

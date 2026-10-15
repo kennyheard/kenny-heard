@@ -12,6 +12,7 @@ import { Main } from "@/components/main";
 import { DraftModeToast } from "@/components/sanity/draft-mode-toast";
 import { resolveMetadata } from "@/config/metadata";
 import { darkSchemeQuery, lightSchemeQuery, themeColors, themeScript } from "@/config/theme";
+import { isDevelopment } from "@/lib/environment";
 import { identityQuery, navigationQuery } from "@/sanity/groq/documents";
 import { handleSanityLiveError } from "@/sanity/lib/errors";
 import { SanityLive, getDynamicFetchOptions, sanityFetch } from "@/sanity/lib/live";
@@ -64,9 +65,9 @@ export default async function FrontendLayout({ children }: LayoutProps<"/">) {
             <CachedFooter perspective="published" stega={false} />
           )}
         </div>
+        {(isDraftMode || isDevelopment) && <SanityLive onError={handleSanityLiveError} includeDrafts={isDraftMode} />}
         {isDraftMode && (
           <>
-            <SanityLive onError={handleSanityLiveError} includeDrafts />
             <DraftModeToast />
             <VisualEditing />
           </>
