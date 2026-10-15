@@ -9,7 +9,7 @@ import type { Nullable } from "@/types";
 
 // A local build reads its own dataset, so pruning from it could delete images that another environment still uses.
 if (isDevelopment) {
-  console.log("Skipped pruning social images, since local builds never touch the Blob store.");
+  console.log("Skipped pruning social images locally");
 } else {
   const documents = await client.fetch<Nullable<SanityRoutedDocument>[]>(
     routedDocumentsQuery,
@@ -25,8 +25,6 @@ if (isDevelopment) {
   const prunedCount = await pruneSocialImages(paths);
 
   console.log(
-    prunedCount > 0
-      ? `Pruned ${prunedCount} social images of pages that no longer exist.`
-      : "Found no social images to prune.",
+    prunedCount > 0 ? `Pruned ${prunedCount} social image${prunedCount === 1 ? "" : "s"}` : "No social images to prune",
   );
 }
