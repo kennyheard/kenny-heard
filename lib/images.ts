@@ -40,11 +40,8 @@ interface ResolvedImage {
 /** Image profiles keyed by name. */
 export type ImageConfig<T extends string> = Record<T, ImageProfileDefinition>;
 
-/**
- * URL builder for the configured dataset, shared because the loader builds a URL for every width. Its URLs are on the
- * site's own domain, so the carbon figure can count them.
- */
-const imageUrlBuilder = createImageUrlBuilder({ baseUrl: "/", projectId, dataset });
+/** URL builder for the configured dataset, shared because the loader builds a URL for every width. */
+const imageUrlBuilder = createImageUrlBuilder({ projectId, dataset });
 
 /**
  * Builds an image CDN URL for a Sanity image.
