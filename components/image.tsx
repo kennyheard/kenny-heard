@@ -1,5 +1,3 @@
-"use client";
-
 import NextImage from "next/image";
 import type { ImageProps as NextImageProps } from "next/image";
 import { cn, tv } from "tailwind-variants";
@@ -9,23 +7,25 @@ import { imageProfiles, resolveImage } from "@/config/images";
 import type { ImageProfile } from "@/config/images";
 import { isDefined } from "@/lib/utils";
 import type { SanityAnyImage } from "@/sanity/types";
-import type { Nullable } from "@/types";
+import type { Exclusive, Nullable } from "@/types";
 
 export type ImageCommonProps = VariantProps<typeof variants> & {
   caption?: string;
   profile: ImageProfile;
 };
 
-export type ImageProps<T extends "image" | "src" = "image"> = T extends "image"
-  ? ImageCommonProps &
-      Omit<NextImageProps, "src" | "alt" | "quality"> & { image?: Nullable<SanityAnyImage>; src?: never; alt?: string }
-  : ImageCommonProps & NextImageProps & { image?: never };
+export type ImageSanityProps = Omit<NextImageProps, "src" | "alt" | "quality"> & {
+  image?: Nullable<SanityAnyImage>;
+  alt?: string;
+};
+
+export type ImageProps = ImageCommonProps & Exclusive<ImageSanityProps, NextImageProps>;
 
 export const variants = tv({
   base: "relative flex size-full flex-col items-center justify-center gap-3 overflow-hidden",
 });
 
-export function Image({ image, caption, profile, className, ...props }: ImageProps<"image" | "src">) {
+export function Image({ caption, profile, image, className, ...props }: ImageProps) {
   const { src, alt, width, height, fill, preload, style, ...forwardedProps } = props;
   const resolvedImage = resolveImage({ image, src, width, height, profile });
 
@@ -48,7 +48,7 @@ export function Image({ image, caption, profile, className, ...props }: ImagePro
         fill={fill}
         preload={preload}
         fetchPriority={preload === true ? "high" : "auto"}
-        className="outline-hairline size-full max-w-(--breakpoint-container) rounded-md object-cover outline -outline-offset-1"
+        className="outline-hairline max-w-content size-full rounded-md object-cover outline -outline-offset-1"
         style={{ objectPosition: resolvedImage.objectPosition, ...style }}
         {...(fill !== true && {
           width: resolvedImage.width,

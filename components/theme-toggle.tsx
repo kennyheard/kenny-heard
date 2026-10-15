@@ -8,19 +8,19 @@ import { Icon } from "@/components/icon";
 import { useSystemTheme } from "@/hooks/use-system-theme";
 import { toggleTheme } from "@/lib/theme";
 
-export type ThemeToggleProps = Omit<ButtonProps, "children" | "onPress">;
+export type ThemeToggleProps = Omit<ButtonProps, "children" | "onClick">;
 
 export function ThemeToggle(props: ThemeToggleProps) {
   useSystemTheme();
 
   return (
-    <Button theme="icon" onPress={toggleTheme} {...props}>
+    <Button onClick={toggleTheme} theme="icon" {...props}>
       <span className="dark:hidden">
-        <Icon icon={IconMoon} />
+        <Icon value={IconMoon} />
         <span className="sr-only">Switch to dark mode</span>
       </span>
       <span className="hidden dark:block">
-        <Icon icon={IconSun} />
+        <Icon value={IconSun} />
         <span className="sr-only">Switch to light mode</span>
       </span>
     </Button>

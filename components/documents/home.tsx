@@ -1,14 +1,10 @@
-import { Container } from "@/components/container";
 import { PortableText } from "@/components/content/portable-text";
 import { Entry } from "@/components/entry";
-import { EntryList } from "@/components/entry-list";
-import { Feed } from "@/components/feed";
+import { Feed } from "@/components/feed/feed";
 import { Introduction } from "@/components/introduction";
 import { Row } from "@/components/row";
-import { RowList } from "@/components/row-list";
 import { Section } from "@/components/section";
-import { feedPageSize } from "@/config/feed";
-import { getFirstPageCount, toFeedEntry } from "@/lib/feed";
+import { getFirstPageCount } from "@/lib/feed";
 import type { SanityFeedItem } from "@/lib/feed";
 import { isDefined } from "@/lib/utils";
 import { defaultDocumentTitle } from "@/sanity/config/defaults";
@@ -26,36 +22,29 @@ export function HomeDocument({ document, feed }: HomeDocumentProps) {
 
   return (
     <>
-      <h1 className="sr-only">{title}</h1>
-      {isDefined(introduction) && <Introduction>{introduction}</Introduction>}
+      <Introduction title={title}>{introduction}</Introduction>
       <Section>
-        <Container>
-          <RowList>
-            {isDefined(now) && (
-              <Row label="Now">
-                <EntryList>
-                  {now.map((work) => (
-                    <Entry key={work._key} icon={work.icon} title={work.title} description={work.description} />
-                  ))}
-                </EntryList>
+        {isDefined(now) && (
+          <Row label="Now">
+            {now.map((work) => (
+              <Entry key={work._key} entry={work} />
+            ))}
+          </Row>
+        )}
+        <Feed
+          items={feed ?? []}
+          initialCount={getFirstPageCount(now?.length ?? 0)}
+          endNote={
+            isDefined([heading, body]) && (
+              <Row label="Before" className="md:mt-8">
+                <div className="flex flex-col gap-2">
+                  {isDefined(heading) && <h3 className="font-title text-balance">{heading}</h3>}
+                  {isDefined(body) && <PortableText value={body} type="note" />}
+                </div>
               </Row>
-            )}
-            <Feed
-              entries={feed?.map((item) => toFeedEntry(item)) ?? []}
-              pageSize={feedPageSize}
-              initialCount={getFirstPageCount(now?.length ?? 0)}
-            >
-              {isDefined([heading, body]) && (
-                <Row label="Before" className="md:mt-8">
-                  <div className="flex flex-col gap-2">
-                    {isDefined(heading) && <h3 className="font-title text-balance">{heading}</h3>}
-                    {isDefined(body) && <PortableText value={body} type="note" />}
-                  </div>
-                </Row>
-              )}
-            </Feed>
-          </RowList>
-        </Container>
+            )
+          }
+        />
       </Section>
     </>
   );

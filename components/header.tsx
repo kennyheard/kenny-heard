@@ -23,8 +23,8 @@ export function Header({ name, profession, className, ...props }: HeaderProps) {
   return (
     <header className={variants({ className })} {...props}>
       <Container className="flex-row items-start justify-between gap-6">
-        <div className="font-title flex flex-col gap-1">
-          <Link href="/" intent="none" className="text-foreground w-fit">
+        <div className="font-title flex flex-col">
+          <Link to={{ _type: "home" }} intent="none" className="text-foreground w-fit">
             {name ?? site.name}
           </Link>
           {isDefined(profession) && <PortableText value={profession} type="profession" />}

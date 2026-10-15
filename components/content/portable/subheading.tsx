@@ -20,12 +20,12 @@ export function PortableSubheading({ id, className, children, ...props }: Portab
     <h2 id={id} className={variants({ className })} {...props}>
       {children}
       <Link
-        href={`#${id}`}
-        intent="none"
+        to={`#${id}`}
         aria-label="Link to this section"
+        intent="none"
         className="group-hocus:opacity-100 ml-2 inline-flex align-middle opacity-0"
       >
-        <Icon icon={IconChainLink1} size="0.75rem" />
+        <Icon value={IconChainLink1} size="0.75rem" />
       </Link>
     </h2>
   );

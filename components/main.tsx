@@ -6,10 +6,6 @@ export type MainProps = ComponentProps<"main"> & VariantProps<typeof variants>;
 
 export const variants = tv({});
 
-export function Main({ className, children, ...props }: MainProps) {
-  return (
-    <main id="main" className={variants({ className })} {...props}>
-      {children}
-    </main>
-  );
+export function Main({ className, ...props }: MainProps) {
+  return <main id="main" className={variants({ className })} {...props} />;
 }

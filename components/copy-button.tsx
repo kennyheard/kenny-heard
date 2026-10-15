@@ -8,7 +8,7 @@ import { Icon } from "@/components/icon";
 import { useCopied } from "@/hooks/use-copied";
 import { copyText } from "@/lib/clipboard";
 
-export type CopyButtonProps = Omit<ButtonProps, "children" | "onPress"> & {
+export type CopyButtonProps = Omit<ButtonProps, "children" | "onClick"> & {
   text: string;
 };
 
@@ -21,13 +21,13 @@ export function CopyButton({ text, ...props }: CopyButtonProps) {
 
   return (
     <Button
-      theme="compact"
-      onPress={() => {
+      onClick={() => {
         void handleCopy();
       }}
+      theme="compact"
       {...props}
     >
-      <Icon icon={isCopied ? IconCircleCheck : IconSquareBehindSquare1} />
+      <Icon value={isCopied ? IconCircleCheck : IconSquareBehindSquare1} />
       <span aria-live="polite">{isCopied ? "Copied" : "Copy"}</span>
     </Button>
   );

@@ -2,6 +2,8 @@ import type { ComponentProps } from "react";
 import { tv } from "tailwind-variants";
 import type { VariantProps } from "tailwind-variants";
 
+import { Container } from "@/components/container";
+
 export type SectionProps = ComponentProps<"section"> & VariantProps<typeof variants>;
 
 export const variants = tv({
@@ -19,7 +21,7 @@ export const variants = tv({
 export function Section({ type, className, children, ...props }: SectionProps) {
   return (
     <section className={variants({ type, className })} {...props}>
-      {children}
+      <Container className="gap-18 md:gap-24">{children}</Container>
     </section>
   );
 }

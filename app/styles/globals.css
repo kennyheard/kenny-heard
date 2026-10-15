@@ -2,8 +2,21 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@custom-variant hocus {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+
+  &:focus-visible,
+  &:has(:focus-visible) {
+    @slot;
+  }
+}
+
 @theme {
-  --breakpoint-container: 640px;
+  --container-content: 640px;
 
   --font-sans: var(--font-timeless-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-timeless-serif), ui-serif, Georgia, serif;
@@ -26,45 +39,32 @@
   --color-code-function: var(--color-teal-600);
 }
 
-@custom-variant hocus {
-  @media (hover: hover) {
-    &:hover {
-      @slot;
-    }
-  }
-
-  &[data-focus-visible],
-  &:has([data-focus-visible]) {
-    @slot;
-  }
-}
-
 @utility font-heading {
   @apply font-serif text-4xl/tight italic;
 }
 
 @utility font-quote {
-  @apply font-serif text-2xl/snug italic;
-}
-
-@utility font-subheading {
-  @apply font-serif text-xl/snug italic;
+  @apply font-serif text-3xl/tight italic;
 }
 
 @utility font-term {
   @apply font-serif text-2xl/snug;
 }
 
+@utility font-subheading {
+  @apply font-serif text-2xl/snug italic;
+}
+
 @utility font-title {
   @apply font-serif text-base/normal;
 }
 
-@utility font-caption {
-  @apply font-serif text-sm/normal italic;
-}
-
 @utility font-body {
   @apply font-serif text-base/loose font-light;
+}
+
+@utility font-caption {
+  @apply font-serif text-sm/normal italic;
 }
 
 @utility font-intro {
@@ -84,27 +84,27 @@
 }
 
 @utility focus-ring {
-  &:has([data-focus-visible]),
-  &[data-focus-visible],
-  .group\/focus:has([data-focus-visible]) &,
-  .group\/focus[data-focus-visible] & {
+  &:has(:focus-visible),
+  &:focus-visible,
+  .group\/focus:has(:focus-visible) &,
+  .group\/focus:focus-visible & {
     @apply ring-muted! ring-offset-background rounded-xs ring-1 ring-offset-2 outline-none;
   }
 
-  &[data-focused] {
+  &:focus {
     @apply outline-none;
   }
 }
 
 @utility focus-border {
-  &:has([data-focus-visible]),
-  &[data-focus-visible],
-  .group\/focus:has([data-focus-visible]) &,
-  .group\/focus[data-focus-visible] & {
+  &:has(:focus-visible),
+  &:focus-visible,
+  .group\/focus:has(:focus-visible) &,
+  .group\/focus:focus-visible & {
     @apply border-muted! border outline-none;
   }
 
-  &[data-focused] {
+  &:focus {
     @apply outline-none;
   }
 }

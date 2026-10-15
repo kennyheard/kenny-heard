@@ -27,14 +27,12 @@ export function Footer({ menu, social, className, ...props }: FooterProps) {
   return (
     <footer className={variants({ className })} {...props}>
       <Container className="border-rule gap-8 border-t pt-6 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <Navigation menu={menu} />
-        </div>
+        <Navigation menu={menu} />
         {isDefined(social) && (
           <div className="flex gap-6">
             {social.map(({ _key, link, icon }) => (
-              <Link key={_key} link={link} as="button" theme="icon" aria-label={stegaClean(link?.label)}>
-                <Icon icon={icon} />
+              <Link key={_key} to={link} aria-label={stegaClean(link?.label)} as="button" theme="icon">
+                <Icon value={icon} />
               </Link>
             ))}
           </div>

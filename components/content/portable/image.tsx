@@ -5,7 +5,7 @@ import { Image } from "@/components/image";
 import type { ImageProps } from "@/components/image";
 import type { SanityAccessibleImage } from "@/sanity/schemas/types/accessible-image";
 
-export type PortableImageProps = Omit<ImageProps, "image" | "profile" | "children"> &
+export type PortableImageProps = Omit<ImageProps, "image" | "src" | "profile" | "quality" | "children"> &
   VariantProps<typeof variants> & {
     value: SanityAccessibleImage;
   };

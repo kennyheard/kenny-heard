@@ -2,7 +2,7 @@ import { defineImageConfig } from "@/lib/images";
 
 export type ImageProfile = keyof typeof config.imageProfiles;
 
-/** Maximum content width in pixels, which must match `--breakpoint-container` in `app/styles/globals.css`. */
+/** Maximum content width in pixels, which must match `--container-content` in `app/styles/globals.css`. */
 export const containerMaxWidth = 640;
 
 /** Image profiles for each context an image appears in. */

@@ -5,9 +5,11 @@ import type { SanityFeedItem } from "@/lib/feed";
 import {
   extendedPortableTextFragment,
   navigationMenuFragment,
+  readingMinutesFragment,
   seoSettingsFragment,
   standardPortableTextFragment,
 } from "@/sanity/groq/fragments";
+import type { SanityReadingTime } from "@/sanity/groq/fragments";
 import { defineTypedQuery } from "@/sanity/lib/groq";
 import type { SanityArticle } from "@/sanity/schemas/documents/collections/article";
 import type { SanityNavigation } from "@/sanity/schemas/documents/globals/navigation";
@@ -24,7 +26,7 @@ export const homeQuery = defineTypedQuery<SanityHome>(`
   }
 `);
 
-/** Articles and entries, newest first, with only the fields the feed shows and the text of each article's body. */
+/** Articles and entries, newest first, shaped as the entries the feed shows. */
 export const feedQuery = defineTypedQuery<SanityFeedItem[]>(`
   *[_type in ["article", "entry"] && defined(date)] | order(date desc) {
     _id,
@@ -33,18 +35,21 @@ export const feedQuery = defineTypedQuery<SanityFeedItem[]>(`
     title,
     description,
     date,
-    ${routeParamsFragment},
-    link { ..., ${linkFragment} },
-    comingSoon,
-    _type == "article" => { "body": body[_type == "block"] { _type, children[] { _type, text } } }
+    "isComingSoon": comingSoon == true,
+    _type == "article" => {
+      "link": { "_type": "link", "type": "page", "reference": { _id, _type, title, ${routeParamsFragment} } },
+      ${readingMinutesFragment}
+    },
+    _type == "entry" && comingSoon != true => { link { ..., ${linkFragment} } }
   }
 `);
 
-/** Article matching `$slug`, with the links and images in its body. */
-export const articleQuery = defineTypedQuery<SanityArticle>(`
+/** Article matching `$slug`, with the links and images in its body, and how long it takes to read. */
+export const articleQuery = defineTypedQuery<SanityArticle & SanityReadingTime>(`
   *[_type == "article" && slug.current == $slug][0] {
     ...,
     ${routeParamsFragment},
+    ${readingMinutesFragment},
     body[] { ..., ${extendedPortableTextFragment} }
   }
 `);

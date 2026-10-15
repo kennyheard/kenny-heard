@@ -85,7 +85,7 @@ const professionComponents: PortableTextComponents = {
   marks: {
     ...components.marks,
     linkMark: ({ value, children }: PortableTextMarkComponentProps<SanityLink>) => (
-      <Link link={value} intent="none" tone="subtle">
+      <Link to={value} intent="none" tone="subtle">
         {children}
       </Link>
     ),

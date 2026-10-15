@@ -1,53 +1,20 @@
-"use client";
-
-import { IconArrowInbox, IconArrowUpRight } from "@central-icons-react/round-outlined-radius-2-stroke-1";
-import type { SanityLink } from "@driftime/sanity-plugin-link/render";
 import NextLink from "next/link";
-import { Link as ReactAriaLink, composeRenderProps } from "react-aria-components";
-import type { LinkProps as ReactAriaLinkProps } from "react-aria-components";
+import type { ComponentProps } from "react";
 import { tv } from "tailwind-variants";
 import type { VariantProps } from "tailwind-variants";
 
-// oxlint-disable-next-line import/no-cycle -- Variants are only invoked at render time, never during module evaluation.
 import { variants as buttonVariants } from "@/components/button";
 import { Icon } from "@/components/icon";
-import { resolveLink } from "@/config/links";
-import type { SanityRoute } from "@/config/routes";
+import { resolveLinkAttributes } from "@/lib/links";
+import type { LinkDestination } from "@/lib/links";
 import { isDefined } from "@/lib/utils";
+import type { Exclusive } from "@/types";
 
-interface LinkWithSanityLinkProps {
-  link: SanityLink | undefined;
-  route?: never;
-  href?: never;
-}
-
-interface LinkWithSanityRouteProps {
-  link?: never;
-  route: SanityRoute | undefined;
-  href?: never;
-}
-
-interface LinkWithHrefProps {
-  link?: never;
-  route?: never;
-  href: string | undefined;
-}
-
-interface LinkPathnameProps {
-  /** Path of the current page, which enables the active state. */
-  pathname?: string;
-}
-
-type LinkCommonProps = ReactAriaLinkProps &
-  (LinkWithSanityLinkProps | LinkWithSanityRouteProps | LinkWithHrefProps) &
-  LinkPathnameProps;
-
-export type LinkProps<T extends "link" | "button" = "link"> = T extends "link"
-  ? LinkCommonProps & Omit<VariantProps<typeof variants>, "active"> & { as?: "link" }
-  : LinkCommonProps & VariantProps<typeof buttonVariants> & { as: "button" };
-
-/** Invisible character that forbids a line break, so the arrow never wraps away from the last word. */
-const wordJoiner = "\u2060";
+export type LinkProps = Omit<ComponentProps<typeof NextLink>, "href"> &
+  Exclusive<VariantProps<typeof variants>, VariantProps<typeof buttonVariants> & { as: "button" }> & {
+    to: LinkDestination | undefined;
+    pathname?: string;
+  };
 
 export const variants = tv({
   base: "group focus-ring relative",
@@ -56,15 +23,11 @@ export const variants = tv({
       none: "",
       inline: "dotted-underline inline",
       standalone: "dotted-underline inline",
-      block: "flex size-full",
     },
     tone: {
       inherit: "",
       muted: "hocus:text-foreground text-muted",
       subtle: "hocus:text-foreground",
-    },
-    active: {
-      true: "",
     },
   },
   defaultVariants: {
@@ -73,72 +36,25 @@ export const variants = tv({
   },
 });
 
-export function Link({
-  link,
-  route,
-  href,
-  pathname,
-  target,
-  className,
-  children,
-  ...props
-}: LinkProps<"link" | "button">) {
-  const linkState = resolveLink({ link, route, href, pathname });
-  const { resolvedLink, isExternal, opensNewTab } = linkState;
-  // These getters throw in development without a pathname, so only read them when one is given.
-  const containsActivePath = isDefined(pathname) && linkState.containsActivePath;
-  const isActivePath = isDefined(pathname) && linkState.isActivePath;
+export function Link({ to, pathname, as, intent, tone, theme, className, children, ...props }: LinkProps) {
+  const { label, icon, opensNewTab, attributes } = resolveLinkAttributes(to, pathname);
+  const composedClassName = (as === "button" ? buttonVariants : variants)({ intent, tone, theme, className });
 
-  function composeVariants() {
-    if (props.as === "button") {
-      const { theme } = props;
-      return composeRenderProps(className, (composedClassName) =>
-        buttonVariants({ theme, className: composedClassName }),
-      );
-    }
+  const content = (
+    <>
+      {children ?? label}
+      {opensNewTab && <span className="sr-only select-none"> (opens in a new tab)</span>}
+      {intent === "standalone" && (
+        <Icon value={icon} size="0.75em" tone="muted" inline className="group-hocus:text-current ml-0.5" />
+      )}
+    </>
+  );
 
-    const { intent, tone } = props;
-    return composeRenderProps(className, (composedClassName) =>
-      variants({ intent, tone, active: containsActivePath, className: composedClassName }),
-    );
-  }
-
-  const isStandalone = "intent" in props && props.intent === "standalone";
-  const isMuted = "tone" in props && props.tone === "muted";
-  const isDownloadLink = resolvedLink?.download === true;
-  const isExternalLink = isExternal && !isDownloadLink;
-
-  const glyph = (() => {
-    if (!isStandalone) return undefined;
-    if (isExternalLink) return IconArrowUpRight;
-    if (isDownloadLink) return IconArrowInbox;
-
-    return undefined;
-  })();
+  if (!isDefined(attributes)) return <span className={composedClassName}>{content}</span>;
 
   return (
-    <ReactAriaLink
-      href={resolvedLink?.href}
-      target={target ?? (opensNewTab ? "_blank" : undefined)}
-      className={composeVariants()}
-      aria-current={isActivePath ? "page" : undefined}
-      render={(renderProps) =>
-        "href" in renderProps ? <NextLink {...renderProps} prefetch /> : <span {...renderProps} />
-      }
-      {...props}
-    >
-      {composeRenderProps(children, (composedChildren) => (
-        <>
-          {composedChildren ?? resolvedLink?.label}
-          {opensNewTab && <span className="sr-only"> (opens in a new tab)</span>}
-          {isDefined(glyph) && (
-            <>
-              {wordJoiner}
-              <Icon icon={glyph} size="0.75em" tone={isMuted ? "inherit" : "muted"} inline className="ml-0.5" />
-            </>
-          )}
-        </>
-      ))}
-    </ReactAriaLink>
+    <NextLink {...attributes} prefetch className={composedClassName} {...props}>
+      {content}
+    </NextLink>
   );
 }

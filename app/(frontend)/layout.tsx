@@ -6,7 +6,6 @@ import { draftMode } from "next/headers";
 import { Suspense } from "react";
 import { cn } from "tailwind-variants";
 
-import { Providers } from "@/app/(frontend)/providers";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Link } from "@/components/link";
@@ -51,36 +50,34 @@ export default async function FrontendLayout({ children }: LayoutProps<"/">) {
       <head>{themeScriptElement}</head>
       <body id="top" className="text-foreground font-sans">
         <div className="sr-only focus-within:not-sr-only focus-within:fixed focus-within:top-4 focus-within:left-4 focus-within:z-100">
-          <Link as="button" href="#main">
+          <Link to="#main" as="button">
             Skip to content
           </Link>
         </div>
-        <Providers>
-          <div className="flex min-h-dvh flex-col px-8 py-12 md:py-16">
-            {isDraftMode ? (
-              <Suspense fallback={<Header />}>
-                <DynamicHeader />
-              </Suspense>
-            ) : (
-              <CachedHeader perspective="published" stega={false} />
-            )}
-            <Main className="flex flex-1 flex-col">{children}</Main>
-            {isDraftMode ? (
-              <Suspense fallback={<Footer />}>
-                <DynamicFooter />
-              </Suspense>
-            ) : (
-              <CachedFooter perspective="published" stega={false} />
-            )}
-          </div>
-          <SanityLive onError={handleSanityLiveError} includeDrafts={isDraftMode} />
-          {isDraftMode && (
-            <>
-              <DraftModeToast />
-              <VisualEditing />
-            </>
+        <div className="flex min-h-dvh flex-col px-8 py-12 md:py-24">
+          {isDraftMode ? (
+            <Suspense fallback={<Header />}>
+              <DynamicHeader />
+            </Suspense>
+          ) : (
+            <CachedHeader perspective="published" stega={false} />
           )}
-        </Providers>
+          <Main className="flex flex-1 flex-col">{children}</Main>
+          {isDraftMode ? (
+            <Suspense fallback={<Footer />}>
+              <DynamicFooter />
+            </Suspense>
+          ) : (
+            <CachedFooter perspective="published" stega={false} />
+          )}
+        </div>
+        {isDraftMode && (
+          <>
+            <SanityLive onError={handleSanityLiveError} includeDrafts />
+            <DraftModeToast />
+            <VisualEditing />
+          </>
+        )}
         <Analytics />
         <SpeedInsights />
       </body>

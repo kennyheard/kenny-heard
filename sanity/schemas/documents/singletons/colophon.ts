@@ -27,7 +27,7 @@ export interface SanityColophonSection {
 
 export interface SanityColophonTool {
   _type: "tool";
-  name?: string;
+  title?: string;
   link?: SanityLink;
   description?: string;
 }
@@ -103,21 +103,21 @@ export const colophon = defineType({
                   icon: createSanityIcon(IconHammer),
                   preview: {
                     select: {
-                      name: "name",
+                      title: "title",
                       description: "description",
                     },
-                    prepare(selection: { name?: string; description?: string }) {
-                      const { name, description } = selection;
+                    prepare(selection: { title?: string; description?: string }) {
+                      const { title, description } = selection;
 
                       return {
-                        title: name ?? "Tool",
+                        title: title ?? "Tool",
                         subtitle: description,
                       };
                     },
                   },
                   fields: [
                     defineField({
-                      name: "name" satisfies keyof SanityColophonTool,
+                      name: "title" satisfies keyof SanityColophonTool,
                       type: "string",
                       description: "Name of the tool.",
                       validation: (rule) => rule.required(),

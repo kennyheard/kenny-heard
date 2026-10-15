@@ -32,10 +32,13 @@ interface SanityFetchQueryArgs<T> {
   params?: QueryParams | Promise<QueryParams>;
 }
 
+/** Cache tag on every Sanity fetch, so publishing anything can refresh the whole site at once. */
+export const contentTag = "content";
+
 /** Sanity Live instance that fetches content and keeps it up to date. */
 const live = defineLive({ client, serverToken: token, browserToken: token, strict: true });
 
-/** Component that refreshes the page when its content changes, including drafts in draft mode. */
+/** Component that refreshes the page when its content changes, only rendered in draft mode. */
 export const { SanityLive } = live;
 
 /**
@@ -62,7 +65,7 @@ export async function getDynamicFetchOptions(): Promise<DynamicFetchOptions> {
  */
 export async function sanityFetch<T>(args: SanityFetchQueryArgs<T> & Partial<DynamicFetchOptions>) {
   const { perspective = "published", stega = false } = args;
-  const result = await live.sanityFetch({ ...args, perspective, stega });
+  const result = await live.sanityFetch({ ...args, perspective, stega, tags: [contentTag] });
 
   // oxlint-disable-next-line no-unsafe-type-assertion -- The query result is untyped, so T can't be verified.
   return result as SanityFetchResult<T>;
@@ -79,7 +82,7 @@ export async function sanityFetch<T>(args: SanityFetchQueryArgs<T> & Partial<Dyn
 export async function sanityFetchCached<T>(args: SanityFetchQueryArgs<T> & { perspective: LivePerspective }) {
   "use cache";
 
-  const result = await live.sanityFetch({ ...args, stega: false });
+  const result = await live.sanityFetch({ ...args, stega: false, tags: [contentTag] });
 
   // oxlint-disable-next-line no-unsafe-type-assertion -- The query result is untyped, so T can't be verified.
   return result as SanityFetchResult<T>;

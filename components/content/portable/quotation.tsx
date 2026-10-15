@@ -21,7 +21,7 @@ export function PortableQuotation({ value, className, ...props }: PortableQuotat
 
   return (
     <figure className={variants({ className })} {...props}>
-      <Icon icon={IconOpenQuote1} size="2.5rem" tone="faint" />
+      <Icon value={IconOpenQuote1} size="2.5rem" tone="faint" />
       <blockquote className="font-quote text-balance">{quote}</blockquote>
       {isDefined(attribution) && <figcaption className="font-meta text-muted">{attribution}</figcaption>}
     </figure>

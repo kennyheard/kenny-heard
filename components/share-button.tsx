@@ -8,7 +8,7 @@ import { Icon } from "@/components/icon";
 import { useCopied } from "@/hooks/use-copied";
 import { sharePage } from "@/lib/share";
 
-export type ShareButtonProps = Omit<ButtonProps, "children" | "onPress"> & {
+export type ShareButtonProps = Omit<ButtonProps, "children" | "onClick"> & {
   title: string;
 };
 
@@ -21,12 +21,12 @@ export function ShareButton({ title, ...props }: ShareButtonProps) {
 
   return (
     <Button
-      onPress={() => {
+      onClick={() => {
         void handleShare();
       }}
       {...props}
     >
-      <Icon icon={IconShareOs} />
+      <Icon value={IconShareOs} />
       <span aria-live="polite">{isCopied ? "Link copied" : "Share"}</span>
     </Button>
   );

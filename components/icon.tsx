@@ -11,7 +11,7 @@ import { isDefined } from "@/lib/utils";
 
 export type IconProps = Omit<CentralIconBaseProps, "size" | "strokeWidth"> &
   VariantProps<typeof variants> & {
-    icon: CentralIcon | SanityIcon | undefined;
+    value: CentralIcon | SanityIcon | undefined;
     size?: `${number}em` | `${number}rem`;
   };
 
@@ -24,7 +24,7 @@ export const variants = tv({
       inherit: "",
     },
     inline: {
-      true: "inline -translate-y-[calc((1cap-1ex)/2)] align-middle",
+      true: "pe-(--icon-size)",
     },
   },
   defaultVariants: {
@@ -32,33 +32,49 @@ export const variants = tv({
   },
 });
 
-export function Icon({ icon, size, tone, inline, className, ...props }: IconProps) {
+export function Icon({ value, size, tone, inline = false, className, ...props }: IconProps) {
   const resolvedSize = size ?? defaultIconProps.size;
+  const composedClassName = variants({ tone, inline, className });
 
-  if (isSanityIcon(icon)) {
+  if (!isDefined(value)) return null;
+
+  // Keeps the icon on the same line as the word before it.
+  if (inline) {
+    return (
+      <span className={composedClassName} style={{ "--icon-size": resolvedSize }}>
+        <span className="absolute">
+          <Icon
+            value={value}
+            size={size}
+            className="inline -translate-y-[calc((1cap-1ex)/2)] align-middle"
+            {...props}
+          />
+        </span>
+      </span>
+    );
+  }
+
+  if (isSanityIcon(value)) {
     return (
       <SanityPluginIcon
-        value={icon}
+        value={value}
         width={resolvedSize}
         height={resolvedSize}
         strokeWidth={defaultIconProps.strokeWidth}
         aria-hidden
-        className={variants({ tone, inline, className })}
+        className={composedClassName}
         {...props}
       />
     );
   }
 
-  if (!isDefined(icon)) return null;
-
-  const Glyph = icon;
-
+  const Component = value;
   return (
-    <Glyph
+    <Component
       size={resolvedSize}
       strokeWidth={defaultIconProps.strokeWidth}
       aria-hidden
-      className={variants({ tone, inline, className })}
+      className={composedClassName}
       {...props}
     />
   );

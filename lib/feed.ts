@@ -1,115 +1,58 @@
 import type { SanityIcon } from "@driftime/sanity-plugin-icon/render";
-import type { SanityLink, SanityLinkRouteParams } from "@driftime/sanity-plugin-link/render";
+import type { SanityLink } from "@driftime/sanity-plugin-link/render";
 import { stegaClean } from "next-sanity";
 
-import { feedPageSize } from "@/config/feed";
-import { resolveRoute } from "@/config/links";
-import { formatReadingTime, getReadingMinutes } from "@/lib/portable-text";
-import { isDefined } from "@/lib/utils";
+import { fallbackFeedIcons, feedPageSize } from "@/config/feed";
+import type { CentralIcon } from "@/lib/icons";
+import type { SanityReadingTime } from "@/sanity/groq/fragments";
 import type { SanityArticle } from "@/sanity/schemas/documents/collections/article";
 import type { SanityEntry } from "@/sanity/schemas/documents/collections/entry";
 
-/** Article or entry as the home page's feed fetches it, with only the fields it shows and an article's text for its reading time. */
-export type SanityFeedItem = Pick<
-  SanityArticle | SanityEntry,
-  "_id" | "_type" | "icon" | "title" | "description" | "date"
-> &
-  Pick<SanityEntry, "link" | "comingSoon"> &
-  Pick<SanityArticle, "body"> & {
-    /** Route parameter values, present on articles. */
-    _routeParams?: SanityLinkRouteParams;
+/** Article or entry as the home page's feed fetches it, shaped as the entry it shows. */
+export type SanityFeedItem = (SanityArticle | SanityEntry) &
+  SanityReadingTime & {
+    /** Where the title links to: an article's own page, or an entry's link once it has launched. */
+    link?: SanityLink;
+    /** Whether the item hasn't launched yet. */
+    isComingSoon: boolean;
   };
 
-/** Item in the home page's feed, as the plain values it shows. */
-export interface FeedEntry {
-  /** Unique key for the item. */
-  key: string;
-  /** Kind of document the item comes from. */
-  type: SanityFeedItem["_type"];
-  /** Icon shown before the title, marking what kind of thing it is. */
-  icon?: SanityIcon;
-  /** Title shown in the feed. */
-  title?: string;
-  /** One-line summary shown under the title. */
-  description?: string;
-  /** Year the item is dated. */
-  year: string;
-  /** Link an entry's title goes to, or undefined for an article or an item that doesn't link. */
-  link?: SanityLink;
-  /** Address an article's title links to, or undefined for an entry. */
-  href?: string;
-  /** How long an article takes to read, such as "12 minutes", or undefined for an entry. */
-  readingTime?: string;
-  /** Whether the item hasn't launched yet. */
-  isComingSoon: boolean;
-}
-
-/** Run of consecutive feed items from the same year. */
-export interface FeedYear {
-  /** Year the items are dated. */
-  year: string;
-  /** Items from that year, in feed order. */
-  entries: FeedEntry[];
-}
+/** Feed item as the feed shows it, with an icon for certain and its place in the whole feed. */
+export type FeedItem = Omit<SanityFeedItem, "icon"> & { icon: CentralIcon | SanityIcon; index: number };
 
 /**
- * Maps a fetched article or entry to the plain values the feed shows.
+ * Groups feed items into runs from the same year, numbering each by its place in the whole feed and giving any item
+ * without an icon the one for its kind.
  *
- * @param item - The article or entry.
- * @returns The feed item.
+ * @param items - The items, newest first.
+ * @returns The runs, newest first, each with the places of its first and last item.
  */
-export function toFeedEntry(item: SanityFeedItem): FeedEntry {
-  const { _id, _type, icon, title, description, date, link, comingSoon, body } = item;
-  const isComingSoon = comingSoon === true;
+export function groupFeedByYear(items: SanityFeedItem[]) {
+  const years: { year: string; start: number; end: number; items: FeedItem[] }[] = [];
 
-  return {
-    key: _id,
-    type: _type,
-    icon,
-    title,
-    description,
-    year: stegaClean(date)?.slice(0, 4) ?? "",
-    link: _type === "entry" && !isComingSoon ? link : undefined,
-    href: _type === "article" ? resolveRoute(item) : undefined,
-    readingTime: isDefined(body) ? formatReadingTime(getReadingMinutes(body)) : undefined,
-    isComingSoon,
-  };
-}
+  for (const [index, item] of items.entries()) {
+    const year = stegaClean(item.date)?.slice(0, 4) ?? "";
+    const feedItem = { ...item, icon: item.icon ?? fallbackFeedIcons[item._type], index };
+    const lastYear = years.at(-1);
 
-/**
- * Groups feed items into runs from the same year, keeping their order.
- *
- * @param entries - The feed items, newest first.
- * @returns The runs, newest first.
- */
-export function groupByYear(entries: FeedEntry[]) {
-  const groups: FeedYear[] = [];
-
-  for (const entry of entries) {
-    const lastGroup = groups.at(-1);
-
-    if (lastGroup?.year === entry.year) lastGroup.entries.push(entry);
-    else groups.push({ year: entry.year, entries: [entry] });
+    if (lastYear?.year === year) {
+      lastYear.items.push(feedItem);
+      lastYear.end = index;
+    } else {
+      years.push({ year, start: index, end: index, items: [feedItem] });
+    }
   }
 
-  return groups;
+  return years;
 }
 
 /**
- * Works out how many entries the feed's first page shows, once the items above it have taken their share.
+ * Works out how many entries the feed's first page shows, once the items above it have taken their share, and never
+ * fewer than one.
  *
  * @param itemsAbove - Number of items shown above the feed on its first page.
  * @returns The number of entries.
  */
 export function getFirstPageCount(itemsAbove: number) {
-  return Math.max(feedPageSize - itemsAbove, 0);
-}
-
-/**
- * Moves focus to whatever the feed has just revealed, so keyboard and screen reader users carry on from it.
- *
- * @param node - The revealed element, or null when it unmounts.
- */
-export function focusRevealed(node: HTMLDivElement | null) {
-  node?.focus();
+  return Math.max(feedPageSize - itemsAbove, 1);
 }

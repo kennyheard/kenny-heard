@@ -1,9 +1,6 @@
-import { Container } from "@/components/container";
 import { Entry } from "@/components/entry";
-import { EntryList } from "@/components/entry-list";
 import { Introduction } from "@/components/introduction";
 import { Row } from "@/components/row";
-import { RowList } from "@/components/row-list";
 import { Section } from "@/components/section";
 import { isDefined } from "@/lib/utils";
 import { defaultDocumentTitle } from "@/sanity/config/defaults";
@@ -19,23 +16,16 @@ export function ColophonDocument({ document }: ColophonDocumentProps) {
 
   return (
     <>
-      <h1 className="sr-only">{title}</h1>
-      {isDefined(introduction) && <Introduction>{introduction}</Introduction>}
+      <Introduction title={title}>{introduction}</Introduction>
       {isDefined(sections) && (
         <Section>
-          <Container>
-            <RowList>
-              {sections.map(({ _key, label, tools }) => (
-                <Row key={_key} label={label}>
-                  <EntryList>
-                    {tools?.map(({ _key: toolKey, name, link, description }) => (
-                      <Entry key={toolKey} title={name} description={description} link={link} />
-                    ))}
-                  </EntryList>
-                </Row>
+          {sections.map(({ _key, label, tools }) => (
+            <Row key={_key} label={label}>
+              {tools?.map((tool) => (
+                <Entry key={tool._key} entry={tool} />
               ))}
-            </RowList>
-          </Container>
+            </Row>
+          ))}
         </Section>
       )}
     </>

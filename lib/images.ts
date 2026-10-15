@@ -3,6 +3,7 @@ import { createImageUrlBuilder } from "@sanity/image-url";
 import type { ImageUrlBuilderOptions } from "@sanity/image-url";
 import type { ImageLoader, ImageProps } from "next/image";
 
+import { loader } from "@/lib/loader";
 import { isDefined, isExpandedReference } from "@/lib/utils";
 import { dataset, projectId } from "@/sanity/lib/api";
 import type { SanityAccessibleImage } from "@/sanity/schemas/types/accessible-image";
@@ -40,7 +41,7 @@ interface ResolvedImage {
 /** Image profiles keyed by name. */
 export type ImageConfig<T extends string> = Record<T, ImageProfileDefinition>;
 
-/** URL builder for the configured dataset, shared because the loader builds a URL for every width. */
+/** URL builder for the configured dataset. */
 const imageUrlBuilder = createImageUrlBuilder({ projectId, dataset });
 
 /**
@@ -106,25 +107,6 @@ function constrainDimensions(aspectRatio: number, width: ImageProps["width"], he
 }
 
 /**
- * Creates a loader that requests each responsive width from the image CDN rather than the Next.js
- * optimiser. When the options set both dimensions, the height scales with each width.
- *
- * @param image - The image.
- * @param options - The profile's options.
- * @returns A loader that returns a URL for a given width.
- */
-function createImageLoader(image: SanityAnyImage, options: ImageUrlBuilderOptions): ImageLoader {
-  const { width: pinnedWidth, height: pinnedHeight } = options;
-  const pinnedAspectRatio = isDefined(pinnedWidth) && isDefined(pinnedHeight) ? pinnedWidth / pinnedHeight : undefined;
-
-  return ({ width }) => {
-    if (!isDefined(pinnedAspectRatio)) return buildImageUrl(image, { fit: "max", ...options, width });
-
-    return buildImageUrl(image, { ...options, width, height: Math.round(width / pinnedAspectRatio) });
-  };
-}
-
-/**
  * Creates image helpers bound to a set of profiles.
  *
  * @param imageConfig - The profiles, keyed by name.
@@ -160,7 +142,6 @@ export function defineImageConfig<T extends string>(imageConfig: ImageConfig<T>)
   function resolveSanityImage(image: SanityAnyImage, profile: ImageProfile) {
     const { options } = imageProfiles[profile];
     const src = buildImageUrl(image, options);
-    const loader = createImageLoader(image, options);
 
     const { caption, alt }: Partial<SanityAccessibleImage> = image._type === "accessibleImage" ? image : {};
     const { width, height, aspectRatio } = resolveDimensions(image, options);
