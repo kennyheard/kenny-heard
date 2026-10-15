@@ -25,7 +25,7 @@ const routedDocumentTypes = objectKeys(routes)
   .map((type) => `"${type}"`)
   .join(", ");
 
-/** Every routed document with the fields needed to build its sitemap entry. */
-export const sitemapQuery = defineTypedQuery<Nullable<SanityRoutedDocument>[]>(
+/** Every routed document with the fields needed to build its address and sitemap entry. */
+export const routedDocumentsQuery = defineTypedQuery<Nullable<SanityRoutedDocument>[]>(
   `*[_type in [${routedDocumentTypes}]] { _id, _type, _updatedAt, ${routeParamsFragment} }`,
 );

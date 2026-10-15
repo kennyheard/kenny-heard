@@ -6,14 +6,14 @@ import { isIndexedRoute, routes } from "@/config/routes";
 import type { RouteDefinition } from "@/config/routes";
 import { baseUrl } from "@/lib/environment";
 import { isDefined } from "@/lib/utils";
-import { sitemapQuery } from "@/sanity/groq/routes";
+import { routedDocumentsQuery } from "@/sanity/groq/routes";
 import { sanityFetchCached } from "@/sanity/lib/live";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";
   cacheLife("days");
 
-  const { data: documents } = await sanityFetchCached({ query: sitemapQuery, perspective: "published" });
+  const { data: documents } = await sanityFetchCached({ query: routedDocumentsQuery, perspective: "published" });
 
   return (documents ?? [])
     .filter((document) => isDefined(document))

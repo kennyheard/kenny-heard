@@ -12,9 +12,9 @@ import { resolveRoute } from "@/config/links";
 import type { SanityRoute } from "@/config/routes";
 import { socialImageIconSize, socialImageScene, socialImageVersion } from "@/config/social-image";
 import { isDevelopment } from "@/lib/environment";
+import { drawScene } from "@/lib/social-image-scene";
 import { findSocialImageFolder, findStoredImage, storeImage } from "@/lib/social-image-storage";
 import { isDefined } from "@/lib/utils";
-import { drawWallSign } from "@/lib/wall-sign";
 import type { Nullable } from "@/types";
 
 /**
@@ -111,10 +111,14 @@ async function drawSocialImage(path: string, icon: Nullable<SanityIcon>, fallbac
     .slice(0, 16);
   const pathname = `${folder}/${fingerprint}.jpg`;
   const storedImage = isDevelopment ? undefined : await findStoredImage(pathname);
-  if (isDefined(storedImage)) return storedImage;
+  if (isDefined(storedImage)) {
+    console.log(`Used the stored social image for ${path}.`);
+
+    return storedImage;
+  }
 
   const seed = hashText(path);
-  const pixels = drawWallSign(mask, {
+  const pixels = drawScene(mask, {
     ...socialImageScene,
     wall: { ...wall, seed: wall.seed + seed },
     dust: { ...dust, seed: dust.seed + seed },
@@ -123,12 +127,13 @@ async function drawSocialImage(path: string, icon: Nullable<SanityIcon>, fallbac
     .jpeg({ quality: 95, mozjpeg: true, chromaSubsampling: "4:4:4" })
     .toBuffer();
   if (!isDevelopment) await storeImage(folder, pathname, jpeg);
+  console.log(`Drew the social image for ${path}.`);
 
   return new Uint8Array(jpeg);
 }
 
 /**
- * Draws a social image: the page's icon as a matte metal sign on a wall, lit by morning sun through shutters.
+ * Draws a social image: the page's icon as a matte metal sign on a wall, lit by morning sun through louvred blinds.
  *
  * @param route - Route of the page the image is for, which gives its wall and dust a pattern of their own.
  * @param icon - Icon chosen in Sanity, or undefined when there's none.

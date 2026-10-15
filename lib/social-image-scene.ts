@@ -1,5 +1,5 @@
-/** Point on the wall, in pixels from its top-left corner. */
-export interface WallPoint {
+/** Point in the scene, in pixels from its top-left corner. */
+export interface ScenePoint {
   /** Distance from the left edge. */
   x: number;
   /** Distance from the top edge. */
@@ -7,60 +7,67 @@ export interface WallPoint {
 }
 
 /** Colour with each channel from 0 to 1. */
-export type WallColour = [red: number, green: number, blue: number];
+export type SceneColour = [red: number, green: number, blue: number];
 
-/** How a wall sign is drawn: the plaster wall, the metal sign standing off it, the light in the room, and its dust. */
-export interface WallSignSettings {
-  /** Width of the wall, in pixels. */
+/**
+ * How a social image's scene is drawn: a plaster wall in a room, with the icon as a matte metal sign fixed a little off
+ * it, the sun falling through louvred blinds, daylight from the sky, and dust in the air.
+ */
+export interface SocialImageScene {
+  /** Width of the scene, in pixels. */
   width: number;
-  /** Height of the wall, in pixels. */
+  /** Height of the scene, in pixels. */
   height: number;
   /** Plaster the sign is fixed to. */
   wall: {
-    /** Colour of the plaster in plain room light. */
-    colour: WallColour;
+    /** Colour of the plaster in the room's light. */
+    colour: SceneColour;
     /** Height of the plaster's fine texture. */
-    toothDepth: number;
+    textureDepth: number;
     /** Share of the texture taken from its coarser grain. */
-    toothMid: number;
+    textureCoarseness: number;
     /** How much darker the wall falls towards its bottom-right corner. */
-    falloff: number;
+    cornerShading: number;
     /** Strength of the wall's broad, uneven shading. */
     mottle: number;
+    /** How strongly the plaster darkens in shadow. */
+    shadowContrast: number;
+    /** How strongly the plaster brightens in light. */
+    highlightContrast: number;
     /** Seed that fixes the texture, so every image shares the same wall. */
     seed: number;
   };
-  /** Matte metal sign in the shape of the icon. */
+  /** Matte metal cutout in the shape of the icon. */
   sign: {
     /** Colour of the metal in shade. */
-    shade: WallColour;
-    /** Colour of the metal in full sunlight. */
-    highlight: WallColour;
+    shadedColour: SceneColour;
+    /** Colour of the metal in full sun. */
+    litColour: SceneColour;
     /** Strength of the metal's fine, blasted grain. */
     grain: number;
-    /** How much of the sunlight the metal takes on. */
+    /** How much of the sun's light the metal takes on. */
     sunResponse: number;
-    /** How much of the lamp's light the metal takes on. */
-    lampResponse: number;
-    /** Strength of the soft sheen where sunlight crosses the metal. */
-    sheen: number;
-    /** How tightly the sheen gathers into the brightest light. */
-    sheenFocus: number;
-    /** Strength of the sheen where the lamp's light falls on the metal. */
-    lampSheen: number;
+    /** How much of the sky's light the metal takes on. */
+    skyResponse: number;
+    /** Strength of the soft sheen where the sun crosses the metal. */
+    sunSheen: number;
+    /** How tightly the sun's sheen gathers into the brightest light. */
+    sunSheenFocus: number;
+    /** Strength of the sheen where the sky's light falls on the metal. */
+    skySheen: number;
     /** Strength of the light reflected from the wall around it. */
     reflection: number;
-    /** Strength of the highlight along the edges facing the window. */
-    rim: number;
-    /** Strength of the lamp's light catching the edges facing it. */
-    glint: number;
-    /** Tint of the lamp's light along the edges. */
-    glintColour: WallColour;
+    /** Strength of the sun catching the edges facing the window. */
+    sunEdge: number;
+    /** Strength of the sky's light catching the edges facing it. */
+    skyEdge: number;
+    /** Tint of the sky's light along the edges. */
+    skyEdgeTint: SceneColour;
     /** Offset of the sign's shadow from the sign, in pixels. */
-    shadowOffset: WallPoint;
+    shadowOffset: ScenePoint;
     /** Blur radius of the sign's shadow, in pixels. */
     shadowSoftness: number;
-    /** How much sunlight the sign's shadow blocks. */
+    /** How much of the sun the sign's shadow blocks. */
     shadowStrength: number;
     /** Blur radius of the darkening where the sign meets the wall, in pixels. */
     contactSoftness: number;
@@ -69,82 +76,81 @@ export interface WallSignSettings {
     /** Seed that fixes the metal's grain and edges. */
     seed: number;
   };
-  /** Sunlight falling through louvred shutters onto the wall. */
-  light: {
-    /** Corners of the patch of light: nearest left, nearest right, furthest left, furthest right. */
-    corners: [WallPoint, WallPoint, WallPoint, WallPoint];
-    /** Number of louvres in the shutters. */
-    louvres: number;
-    /** Share of each louvre's spacing that lets light through. */
-    open: number;
-    /** Width of each upright stile's shadow, as a share of the patch, or below zero for none. */
-    stile: number;
-    /** Softness of the light's edges nearest the window. */
-    edgeNear: number;
-    /** Softness of the light's edges furthest from the window. */
-    edgeFar: number;
+  /** Sun falling through louvred blinds onto the wall. */
+  sun: {
+    /** Corners of the patch of sunlight: nearest left, nearest right, furthest left, furthest right. */
+    corners: [ScenePoint, ScenePoint, ScenePoint, ScenePoint];
+    /** Number of slats in the blinds. */
+    slats: number;
+    /** Share of each slat's spacing that lets the sun through. */
+    openness: number;
+    /** Width of each upright divider's shadow, as a share of the patch, or below zero for none. */
+    dividerWidth: number;
+    /** Softness of the bands' edges nearest the window. */
+    bandSoftnessNear: number;
+    /** Softness of the bands' edges furthest from the window. */
+    bandSoftnessFar: number;
     /** Softness of the patch's outline nearest the window. */
-    frameNear: number;
+    outlineSoftnessNear: number;
     /** Softness of the patch's outline furthest from the window. */
-    frameFar: number;
-    /** How much the light weakens by the far end of the patch. */
+    outlineSoftnessFar: number;
+    /** How much the sun weakens by the far end of the patch. */
     fade: number;
-    /** How unevenly the louvres are spaced and lit. */
-    vary: number;
+    /** How unevenly the slats are spaced and lit. */
+    irregularity: number;
     /** Strength of the brighter and fainter stretches along each band. */
-    streak: number;
+    streakiness: number;
     /** How much the bands waver. */
-    wave: number;
-    /** Seed that fixes the light's unevenness. */
+    waviness: number;
+    /** Seed that fixes the sun's unevenness. */
     seed: number;
-    /** How much darker the wall is outside the light. */
-    shade: number;
-    /** Share of the wall's texture that still shows outside the light. */
-    ambient: number;
-    /** Strength of the glow spilling around the light. */
+    /** How much darker the wall is outside the sun. */
+    outsideDarkness: number;
+    /** Share of the wall's texture that still shows outside the sun. */
+    outsideTexture: number;
+    /** Strength of the glow spilling around the sun. */
     bloom: number;
-    /** Strength of the wall's shadows. */
-    darkGain: number;
-    /** Strength of the wall's highlights. */
-    lightGain: number;
-    /** Blur radius of the light as it falls on the sign and its shadow, in pixels. */
+    /** Blur radius of the sun as it falls on the sign and its shadow, in pixels. */
     softness: number;
-    /** How sharply the light falls away from its brightest parts. */
-    falloff: number;
-    /** Colour of the sunlight. */
-    colour: WallColour;
-    /** Colour of the room's light outside the sun. */
-    room: WallColour;
-    /** Colour of the faint haze in the air between the wall and the viewer. */
-    haze: WallColour;
+    /** How sharply the sun falls away from its brightest parts. */
+    sharpness: number;
+    /** Colour of the sun. */
+    colour: SceneColour;
   };
-  /** Soft light from the far corner of the room. */
-  lamp: {
-    /** Position of the light's centre, in pixels, which may lie off the wall. */
-    position: WallPoint;
+  /** Soft daylight from the sky, reaching in from beyond the top right. */
+  sky: {
+    /** Position of the light's centre, in pixels, which may lie outside the scene. */
+    position: ScenePoint;
     /** Distance over which the light fades, in pixels. */
     radius: number;
     /** Strength of the light. */
     strength: number;
     /** Colour of the light. */
-    colour: WallColour;
+    colour: SceneColour;
   };
-  /** Dust in the air, lit only where the sunlight passes. */
+  /** The room the wall stands in. */
+  room: {
+    /** Colour of the room's light outside the sun. */
+    colour: SceneColour;
+    /** Colour of the faint haze in the air between the wall and the viewer. */
+    haze: SceneColour;
+  };
+  /** Dust in the air, lit only where the sun passes. */
   dust: {
     /** Number of motes. */
     count: number;
     /** Brightness of the motes. */
-    strength: number;
+    brightness: number;
     /** Seed that fixes where the motes drift. */
     seed: number;
   };
 }
 
 /** Direction the wall's texture is lit from: above, and from the top left. */
-const lightDirection = normalise({ x: -0.55, y: -0.75, z: 0.6 });
+const textureLightDirection = normalise({ x: -0.55, y: -0.75, z: 0.6 });
 
 /** Warmth of the haze lit by the sun in the air. */
-const airGlowColour: WallColour = [1, 0.96, 0.85];
+const airGlowColour: SceneColour = [1, 0.96, 0.85];
 
 /**
  * Converts a hex colour to channels from 0 to 1.
@@ -152,7 +158,7 @@ const airGlowColour: WallColour = [1, 0.96, 0.85];
  * @param hex - The colour, as `#rrggbb`.
  * @returns The colour's red, green, and blue channels.
  */
-export function hexToWallColour(hex: string): WallColour {
+export function hexToSceneColour(hex: string): SceneColour {
   return [
     Number.parseInt(hex.slice(1, 3), 16) / 255,
     Number.parseInt(hex.slice(3, 5), 16) / 255,
@@ -355,7 +361,7 @@ function valueNoise(width: number, height: number, cell: number, random: () => n
  * @param offset - Distance to move it, in pixels.
  * @returns The moved field.
  */
-function offsetField(input: Float32Array, width: number, height: number, offset: WallPoint) {
+function offsetField(input: Float32Array, width: number, height: number, offset: ScenePoint) {
   const output = new Float32Array(input.length);
 
   for (let y = 0; y < height; y += 1) {
@@ -415,7 +421,7 @@ function enlarge(input: Float32Array, width: number, height: number) {
  * @param corners - Corners of the patch of light.
  * @returns The transform's nine values, read row by row.
  */
-function windowTransform(corners: WallSignSettings["light"]["corners"]) {
+function windowTransform(corners: SocialImageScene["sun"]["corners"]) {
   const [first, second, third, fourth] = corners;
   const dx1 = second.x - fourth.x;
   const dx2 = third.x - fourth.x;
@@ -451,29 +457,29 @@ function windowTransform(corners: WallSignSettings["light"]["corners"]) {
 }
 
 /**
- * Draws the sunlight falling through the shutters onto the wall.
+ * Draws the sun falling through the blinds onto the wall.
  *
- * @param settings - How the light falls.
+ * @param settings - How the sun falls.
  * @param width - Width of the wall.
  * @param height - Height of the wall.
- * @returns The light at each pixel, from 0 to 1.
+ * @returns The sunlight at each pixel, from 0 to 1.
  */
-function drawSunlight(settings: WallSignSettings["light"], width: number, height: number) {
+function drawSunlight(settings: SocialImageScene["sun"], width: number, height: number) {
   const random = createRandom(settings.seed);
   const wobble = valueNoise(width, height, 260, random);
   const streak = gaussianBlur(valueNoise(width, height, 220, random), width, height, 40);
   const edgeNoise = valueNoise(width, height, 90, random);
-  const { vary } = settings;
+  const { irregularity } = settings;
   const bands: { start: number; width: number; strength: number }[] = [];
   let position = 0;
 
-  for (let index = 0; index < settings.louvres + 2; index += 1) {
+  for (let index = 0; index < settings.slats + 2; index += 1) {
     bands.push({
       start: position,
-      width: settings.open * (1 + (random() * 2 - 1) * 0.3 * vary),
-      strength: 1 - random() * 0.3 * vary,
+      width: settings.openness * (1 + (random() * 2 - 1) * 0.3 * irregularity),
+      strength: 1 - random() * 0.3 * irregularity,
     });
-    position += 1 + (random() * 2 - 1) * 0.35 * vary;
+    position += 1 + (random() * 2 - 1) * 0.35 * irregularity;
   }
 
   const { m0, m1, m2, m3, m4, m5, m6, m7, m8 } = windowTransform(settings.corners);
@@ -506,7 +512,8 @@ function drawSunlight(settings: WallSignSettings["light"], width: number, height
       }
 
       const travel = clamp(v);
-      const frame = settings.frameNear + (settings.frameFar - settings.frameNear) * travel;
+      const frame =
+        settings.outlineSoftnessNear + (settings.outlineSoftnessFar - settings.outlineSoftnessNear) * travel;
       const inside =
         smoothstep(-frame, frame, u) *
         (1 - smoothstep(1 - frame, 1 + frame, u)) *
@@ -514,14 +521,14 @@ function drawSunlight(settings: WallSignSettings["light"], width: number, height
         (1 - smoothstep(1 - frame, 1 + frame, v));
       const bentV =
         v +
-        (wobble[index] ?? 0) * 0.018 * vary * settings.wave +
-        Math.sin(u * 4.2 + 1.3) * 0.006 * vary * settings.wave;
+        (wobble[index] ?? 0) * 0.018 * irregularity * settings.waviness +
+        Math.sin(u * 4.2 + 1.3) * 0.006 * irregularity * settings.waviness;
       const edge =
-        (settings.edgeNear + (settings.edgeFar - settings.edgeNear) * travel) *
-        (1 + (edgeNoise[index] ?? 0) * 0.6 * vary);
+        (settings.bandSoftnessNear + (settings.bandSoftnessFar - settings.bandSoftnessNear) * travel) *
+        (1 + (edgeNoise[index] ?? 0) * 0.6 * irregularity);
       const soften = frame * 1.5 + 0.01;
-      const stile = settings.stile * (1 + travel * 0.6) * 1.4;
-      const phase = bentV * settings.louvres;
+      const divider = settings.dividerWidth * (1 + travel * 0.6) * 1.4;
+      const phase = bentV * settings.slats;
       let band = 0;
 
       for (const { start, width: open, strength } of bands) {
@@ -533,11 +540,11 @@ function drawSunlight(settings: WallSignSettings["light"], width: number, height
         );
       }
 
-      const stiles =
-        smoothstep(-soften, soften, Math.abs(u - 1 / 3) - stile) *
-        smoothstep(-soften, soften, Math.abs(u - 2 / 3) - stile);
-      const along = 1 - Math.max(0, streak[index] ?? 0) * settings.streak * vary;
-      sun[index] = inside * band * stiles * along * (1 - settings.fade * travel);
+      const dividers =
+        smoothstep(-soften, soften, Math.abs(u - 1 / 3) - divider) *
+        smoothstep(-soften, soften, Math.abs(u - 2 / 3) - divider);
+      const along = 1 - Math.max(0, streak[index] ?? 0) * settings.streakiness * irregularity;
+      sun[index] = inside * band * dividers * along * (1 - settings.fade * travel);
     }
   }
 
@@ -549,24 +556,24 @@ function drawSunlight(settings: WallSignSettings["light"], width: number, height
  *
  * @param channel - The channel's value in plain room light, from 0 to 1.
  * @param change - How much lighter the wall is, or below zero for how much darker.
- * @param light - How the light falls.
+ * @param wall - How the wall is drawn.
  * @returns The channel's new value, from 0 to 1.
  */
-function shadeChannel(channel: number, change: number, light: WallSignSettings["light"]) {
+function shadeChannel(channel: number, change: number, wall: SocialImageScene["wall"]) {
   return change < 0
-    ? channel * (1 - Math.min(1, -change * light.darkGain))
-    : channel + (1 - channel) * Math.min(1, change * light.lightGain);
+    ? channel * (1 - Math.min(1, -change * wall.shadowContrast))
+    : channel + (1 - channel) * Math.min(1, change * wall.highlightContrast);
 }
 
 /**
- * Works out how the sunlight lightens and darkens the plaster wall, both with its texture and as a smooth surface. The
+ * Works out how the sun lightens and darkens the plaster wall, both with its texture and as a smooth surface. The
  * texture is drawn at half the wall's size, so its grain stays legible once the image is shown smaller.
  *
- * @param settings - How the wall sign is drawn.
+ * @param settings - How the scene is drawn.
  * @returns How much lighter or darker the textured wall is at each pixel, and the smooth wall.
  */
-function drawWall(settings: WallSignSettings) {
-  const { width, height, wall, light } = settings;
+function drawWall(settings: SocialImageScene) {
+  const { width, height, wall, sun } = settings;
   const count = width * height;
   const random = createRandom(wall.seed);
   const textureWidth = width / 2;
@@ -575,12 +582,15 @@ function drawWall(settings: WallSignSettings) {
   const grain = valueNoise(textureWidth, textureHeight, 7, random);
   const mottle = valueNoise(width, height, 160, random);
   const surface = enlarge(
-    Float32Array.from(fine, (value, index) => (value + (grain[index] ?? 0) * wall.toothMid) * wall.toothDepth),
+    Float32Array.from(
+      fine,
+      (value, index) => (value + (grain[index] ?? 0) * wall.textureCoarseness) * wall.textureDepth,
+    ),
     width,
     height,
   );
-  const sun = drawSunlight(light, width, height);
-  const glow = gaussianBlur(sun, width, height, 80);
+  const sunlight = drawSunlight(sun, width, height);
+  const glow = gaussianBlur(sunlight, width, height, 80);
   const textured = new Float32Array(count);
   const smooth = new Float32Array(count);
 
@@ -594,14 +604,17 @@ function drawWall(settings: WallSignSettings) {
       const slopeX = (surface[right] ?? 0) - (surface[left] ?? 0);
       const slopeY = (surface[below] ?? 0) - (surface[above] ?? 0);
       const facing =
-        (-slopeX * lightDirection.x - slopeY * lightDirection.y + lightDirection.z) /
+        (-slopeX * textureLightDirection.x - slopeY * textureLightDirection.y + textureLightDirection.z) /
         Math.sqrt(slopeX * slopeX + slopeY * slopeY + 1);
-      const lit = sun[index] ?? 0;
+      const lit = sunlight[index] ?? 0;
       const relief =
-        (facing - lightDirection.z) * (light.ambient + (1 - light.ambient) * lit) + (mottle[index] ?? 0) * wall.mottle;
+        (facing - textureLightDirection.z) * (sun.outsideTexture + (1 - sun.outsideTexture) * lit) +
+        (mottle[index] ?? 0) * wall.mottle;
       const across = (x / width) * 0.6 + (y / height) * 0.4;
       const base =
-        -(across - 0.5) * wall.falloff * 2 - (1 - lit) * light.shade + (glow[index] ?? 0) * light.bloom * (1 - lit);
+        -(across - 0.5) * wall.cornerShading * 2 -
+        (1 - lit) * sun.outsideDarkness +
+        (glow[index] ?? 0) * sun.bloom * (1 - lit);
       textured[index] = base + relief;
       smooth[index] = base;
     }
@@ -611,15 +624,15 @@ function drawWall(settings: WallSignSettings) {
 }
 
 /**
- * Scatters motes of dust through the air, mostly tiny and faint, drifting in loose clusters that gather in the light.
+ * Scatters motes of dust through the air, mostly tiny and faint, drifting in loose clusters that gather in the sun.
  *
  * @param settings - How the dust is drawn.
- * @param light - Sunlight in and around the bands, at each pixel of the wall, from 0 to 1.
+ * @param sunlight - Sunlight in and around the bands, at each pixel of the wall, from 0 to 1.
  * @param width - Width of the wall.
  * @param height - Height of the wall.
- * @returns The brightness the dust adds at each pixel, before the light that reaches it.
+ * @returns The brightness the dust adds at each pixel, before the sun that reaches it.
  */
-function drawDust(settings: WallSignSettings["dust"], light: Float32Array, width: number, height: number) {
+function drawDust(settings: SocialImageScene["dust"], sunlight: Float32Array, width: number, height: number) {
   const count = width * height;
   const random = createRandom(settings.seed);
   const clusters = softBlur(createNoise(count, random), width, height, 80);
@@ -633,7 +646,7 @@ function drawDust(settings: WallSignSettings["dust"], light: Float32Array, width
     const y = random() * height;
     const index = Math.floor(y) * width + Math.floor(x);
     const density = Math.max(0, (clusters[index] ?? 0) / (densest || 1)) * 1.4 + 0.08;
-    if (random() > density * (0.1 + 0.9 * (light[index] ?? 0))) continue;
+    if (random() > density * (0.1 + 0.9 * (sunlight[index] ?? 0))) continue;
     placed += 1;
 
     const brightness = random();
@@ -663,21 +676,21 @@ function drawDust(settings: WallSignSettings["dust"], light: Float32Array, width
 }
 
 /**
- * Draws a matte metal sign in the shape of an icon, fixed a little off a plaster wall in sunlight through shutters.
+ * Draws a matte metal sign in the shape of an icon, fixed a little off a plaster wall in sun through louvred blinds.
  *
  * @param mask - Coverage of the icon at each pixel of the wall, from 0 to 1.
- * @param settings - How the wall sign is drawn.
- * @returns The wall's pixels, three bytes each for red, green, and blue.
+ * @param settings - How the scene is drawn.
+ * @returns The scene's pixels, three bytes each for red, green, and blue.
  */
-export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
-  const { width, height, wall, sign, light, lamp, dust } = settings;
+export function drawScene(mask: Float32Array, settings: SocialImageScene) {
+  const { width, height, wall, sign, sun, sky, room, dust } = settings;
   const count = width * height;
   const random = createRandom(sign.seed);
 
   const { textured, smooth } = drawWall(settings);
   const smoothBrightness = Float32Array.from(
     smooth,
-    (change) => wall.colour.reduce((sum, channel) => sum + shadeChannel(channel, change, light), 0) / 3,
+    (change) => wall.colour.reduce((sum, channel) => sum + shadeChannel(channel, change, wall), 0) / 3,
   );
   let darkest = 1;
   let brightest = 0;
@@ -691,7 +704,7 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
     Float32Array.from(smoothBrightness, (value) => (value - darkest) / (brightest - darkest || 1)),
     width,
     height,
-    light.softness,
+    sun.softness,
   ).map((value) => clamp(value));
 
   const edgeNoise = boxBlur(createNoise(count, random), width, height, 1);
@@ -749,18 +762,19 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
     for (let x = 0; x < width; x += 1) {
       const index = y * width + x;
       const coverage = cover[index] ?? 0;
-      const sun = sunlight[index] ?? 0;
-      const sunReach = sun ** light.falloff * (1 - (shadow[index] ?? 0) * sign.shadowStrength * (1 - coverage));
+      const sunBrightness = sunlight[index] ?? 0;
+      const sunReach =
+        sunBrightness ** sun.sharpness * (1 - (shadow[index] ?? 0) * sign.shadowStrength * (1 - coverage));
       const occlusion = 1 - (contact[index] ?? 0) * sign.contactStrength * (1 - coverage);
-      const lampDistance = Math.hypot(x - lamp.position.x, y - lamp.position.y);
-      const lampReach = Math.exp(-((lampDistance / lamp.radius) ** 2));
-      const lampGlint = Math.exp(-((lampDistance / (lamp.radius * 1.6)) ** 2));
+      const skyDistance = Math.hypot(x - sky.position.x, y - sky.position.y);
+      const skyReach = Math.exp(-((skyDistance / sky.radius) ** 2));
+      const skyEdgeReach = Math.exp(-((skyDistance / (sky.radius * 1.6)) ** 2));
       const inner = index > width && index < count - width;
       const slopeX = inner ? ((rounded[index + 1] ?? 0) - (rounded[index - 1] ?? 0)) * 0.5 : 0;
       const slopeY = inner ? ((rounded[index + width] ?? 0) - (rounded[index - width] ?? 0)) * 0.5 : 0;
-      const towardsLamp = Math.max(
+      const towardsSky = Math.max(
         0,
-        -(slopeX * (lamp.position.x - x) + slopeY * (lamp.position.y - y)) / (lampDistance || 1),
+        -(slopeX * (sky.position.x - x) + slopeY * (sky.position.y - y)) / (skyDistance || 1),
       );
       const towardsWindow = Math.max(0, (slopeX + slopeY) * Math.SQRT1_2);
       const beam =
@@ -769,43 +783,43 @@ export function drawWallSign(mask: Float32Array, settings: WallSignSettings) {
       const veil = 0.012 + (1 - distanceToWindow) * 0.03 + (roomGlow[index] ?? 0) * 0.025;
 
       for (let channel = 0; channel < 3; channel += 1) {
-        const plaster = shadeChannel(wall.colour[channel] ?? 0, textured[index] ?? 0, light);
+        const plaster = shadeChannel(wall.colour[channel] ?? 0, textured[index] ?? 0, wall);
         const lift =
-          Math.min(1.06, plaster / (shadeChannel(wall.colour[channel] ?? 0, smooth[index] ?? 0, light) || 1)) ** 0.45;
-        const sunColour = light.colour[channel] ?? 0;
-        const roomColour = light.room[channel] ?? 0;
-        const lampLight = lampReach * lamp.strength * (lamp.colour[channel] ?? 0);
+          Math.min(1.06, plaster / (shadeChannel(wall.colour[channel] ?? 0, smooth[index] ?? 0, wall) || 1)) ** 0.45;
+        const sunColour = sun.colour[channel] ?? 0;
+        const roomColour = room.colour[channel] ?? 0;
+        const skyLight = skyReach * sky.strength * (sky.colour[channel] ?? 0);
         const tint =
-          (sign.shade[channel] ?? 0) +
-          ((sign.highlight[channel] ?? 0) - (sign.shade[channel] ?? 0)) * Math.min(1, sun * 1.2);
+          (sign.shadedColour[channel] ?? 0) +
+          ((sign.litColour[channel] ?? 0) - (sign.shadedColour[channel] ?? 0)) * Math.min(1, sunBrightness * 1.2);
         const metal =
           tint *
             (0.95 +
-              sun * 0.22 +
-              (grain[index] ?? 0) * sign.grain * (0.5 + sun) +
+              sunBrightness * 0.22 +
+              (grain[index] ?? 0) * sign.grain * (0.5 + sunBrightness) +
               ((reflection[index] ?? 0) - 0.4) * sign.reflection) *
             lift +
-          sun ** 2.5 * 0.1;
-        const wallLight = roomColour * occlusion + (sunColour - roomColour) * sunReach + lampLight;
+          sunBrightness ** 2.5 * 0.1;
+        const wallLight = roomColour * occlusion + (sunColour - roomColour) * sunReach + skyLight;
         const metalLight =
           roomColour * 0.85 +
           (sunColour - roomColour * 0.85) * sunReach ** 0.8 * sign.sunResponse +
-          lampLight * sign.lampResponse;
+          skyLight * sign.skyResponse;
         const sheen =
-          sunReach ** sign.sheenFocus * sign.sheen * sunColour +
-          lampReach ** 3 * sign.lampSheen * (lamp.colour[channel] ?? 0);
-        const glint =
-          towardsLamp *
-          sign.glint *
-          lamp.strength *
-          (lamp.colour[channel] ?? 0) *
-          (sign.glintColour[channel] ?? 0) *
-          lampGlint;
-        const rim = towardsWindow * sign.rim * sunReach * sunColour;
-        let value = plaster * wallLight * (1 - coverage) + (metal * metalLight + sheen + glint + rim) * coverage;
+          sunReach ** sign.sunSheenFocus * sign.sunSheen * sunColour +
+          skyReach ** 3 * sign.skySheen * (sky.colour[channel] ?? 0);
+        const skyEdge =
+          towardsSky *
+          sign.skyEdge *
+          sky.strength *
+          (sky.colour[channel] ?? 0) *
+          (sign.skyEdgeTint[channel] ?? 0) *
+          skyEdgeReach;
+        const sunEdge = towardsWindow * sign.sunEdge * sunReach * sunColour;
+        let value = plaster * wallLight * (1 - coverage) + (metal * metalLight + sheen + skyEdge + sunEdge) * coverage;
         value += (airGlow[index] ?? 0) * 0.06 * (airGlowColour[channel] ?? 0);
-        value += (motes[index] ?? 0) * dust.strength * beam * sunColour;
-        value = value * (1 - veil) + (light.haze[channel] ?? 0) * veil;
+        value += (motes[index] ?? 0) * dust.brightness * beam * sunColour;
+        value = value * (1 - veil) + (room.haze[channel] ?? 0) * veil;
         pixels[index * 3 + channel] = Math.round(clamp(value) * 255);
       }
     }

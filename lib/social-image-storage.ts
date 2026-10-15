@@ -88,8 +88,9 @@ async function listSocialImages(cursor?: string): Promise<string[]> {
  * Deletes every stored social image that doesn't belong to one of the site's current pages, in every environment.
  *
  * @param paths - Paths of every page that has a social image.
+ * @returns How many images were deleted.
  */
-export async function sweepSocialImages(paths: string[]) {
+export async function pruneSocialImages(paths: string[]) {
   const pageFolders = new Set(paths.map((path) => findPageFolder(path)));
   const storedImages = await listSocialImages();
   const deadImages = storedImages.filter((pathname) => {
@@ -99,4 +100,6 @@ export async function sweepSocialImages(paths: string[]) {
   });
 
   if (isDefined(deadImages)) await del(deadImages);
+
+  return deadImages.length;
 }
