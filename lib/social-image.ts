@@ -112,7 +112,7 @@ async function drawSocialImage(path: string, icon: Nullable<SanityIcon>, fallbac
   const pathname = `${folder}/${fingerprint}.jpg`;
   const storedImage = isDevelopment ? undefined : await findStoredImage(pathname);
   if (isDefined(storedImage)) {
-    console.log(`Used the stored social image for ${path}.`);
+    console.log(`  Used the stored social image for ${path}`);
 
     return storedImage;
   }
@@ -127,7 +127,7 @@ async function drawSocialImage(path: string, icon: Nullable<SanityIcon>, fallbac
     .jpeg({ quality: 95, mozjpeg: true, chromaSubsampling: "4:4:4" })
     .toBuffer();
   if (!isDevelopment) await storeImage(folder, pathname, jpeg);
-  console.log(`Drew the social image for ${path}.`);
+  console.log(`  Drew the social image for ${path}`);
 
   return new Uint8Array(jpeg);
 }
