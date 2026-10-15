@@ -38,7 +38,7 @@
 
 ## Code
 
-**Naming.** Use complete, unabbreviated names. Constants use camelCase like any other variable. Import exports by name rather than through a namespace, and use path aliases rather than relative paths.
+**Naming.** Use complete, unabbreviated names. Constants use camelCase like any other variable. Import exports by name rather than through a namespace (except where lint requires a default import, such as `node:path`), and use path aliases rather than relative paths.
 
 **Ordering.** When a definition sets an order, such as a type, an interface, or a schema, everything that uses or mirrors it follows the same order. That includes destructuring, function parameters, component props, and query fields. Where a spread makes this impractical, the properties after the spread still follow the definition's order. A component's own props come first, in the order its type declares them, followed by its variant props. Where a TypeScript type and its Sanity schema disagree, the TypeScript type sets the order.
 
@@ -68,13 +68,15 @@
 
 ## React
 
-**Server components.** Only add `"use client"` when a component needs client-side interactivity.
+**Server components.** Only add `"use client"` when a component needs client-side interactivity. Everything a client component imports ships to the browser, so keep client components small: render content in server components and pass it to them as `children`.
 
 **Memoisation.** React Compiler handles memoisation, so never use `useMemo`, `useCallback`, or `React.memo`.
 
 **Props.** Derive a component's props from `ComponentProps<"element">` for its root element, intersected with `VariantProps<typeof variants>`, so standard attributes are inherited rather than redeclared. Export the props type, and spread `{...props}` onto the root element as its last attribute so the consumer's values take precedence.
 
-**Wrapping components.** When wrapping an existing component, derive its props from the wrapped component's type and use `Omit` for the props you handle internally. This keeps the original component's type constraints, including discriminated unions. Never omit `className` or `children` only to declare them again as a `string` or `ReactNode`. React Aria accepts render functions for both, so a client component keeps the wrapped component's types and passes them through `composeRenderProps`. A server component is the exception: it can't pass a function to a client component, so it takes the static `string` or `ReactNode` instead. Omit `children` only when the wrapper renders its own content and takes none.
+**Attribute order.** Order a JSX element's attributes from what it is to how it looks: `key` first, then what it renders, then behaviour such as `target`, event handlers, `ref`, and `tabIndex`, then `role` and ARIA attributes, then presentation (a component's variant props, `className`, and `style`), with the spread last.
+
+**Wrapping components.** When wrapping an existing component, derive its props from the wrapped component's type and use `Omit` for the props you handle internally, so the original's type constraints carry over. `Omit` flattens a union, so when the wrapped props are a union, also omit the props of any branch the wrapper never uses. Never omit `className` or `children` only to declare them again as a `string` or `ReactNode`. Omit `children` only when the wrapper renders its own content and takes none.
 
 **Conditional rendering.** Render conditional elements with `{condition && <Element />}`, never with a ternary whose else branch is `undefined`. This only applies to JSX children; value ternaries like `aria-current={isActive ? "page" : undefined}` are fine.
 
@@ -87,6 +89,10 @@
 **No `any`.** Never use `any`, and prefer specific types over `unknown` wherever possible.
 
 **Inferred return types.** Let TypeScript infer return types. Only annotate one where the annotation is the contract, such as unifying several branch shapes or typing a callback's parameters, or where a named type reads better on hover than an expanded object. The compiler asking for an annotation is a reason to look, not a reason to add one. If an annotation only makes up for a weak type upstream, fix that type instead. Next.js metadata routes and `generateMetadata` are annotated by convention.
+
+**Exports.** Export every type that describes data, settings, or props, including the pieces it's built from, even when nothing outside the file uses them yet. Keep a type local only when it's a function's private working shape that no caller should need.
+
+**Exclusive props.** For props that can't be passed together, use `Exclusive` from `types.ts` rather than writing out `?: never` by hand.
 
 ## Documentation
 
