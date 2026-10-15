@@ -35,7 +35,7 @@ export const variants = tv({
   variants: {
     type: {
       body: "font-body text-foreground gap-8",
-      note: "text-muted gap-6 font-serif text-base/relaxed font-light italic",
+      note: "text-muted gap-6 font-serif text-base/relaxed italic",
       profession: "text-muted italic",
     },
   },
@@ -61,7 +61,7 @@ const components: PortableTextComponents = {
   },
   listItem: ({ children }) => <li className="pl-1">{children}</li>,
   marks: {
-    strong: ({ children }) => <strong className="font-medium">{children}</strong>,
+    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
     code: ({ children }) => <code className="font-mono text-sm">{children}</code>,
     linkMark: ({ value, children }: PortableTextMarkComponentProps<SanityLink>) => (
       <PortableLink value={value}>{children}</PortableLink>

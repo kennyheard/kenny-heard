@@ -18,9 +18,9 @@
 @theme {
   --container-content: 640px;
 
-  --font-sans: var(--font-timeless-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-timeless-serif), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: system-ui, sans-serif;
+  --font-serif: Charter, "Sitka Text", Georgia, serif;
+  --font-mono: ui-monospace, Menlo, "Cascadia Mono", Consolas, monospace;
 
   --color-background: var(--color-zinc-50);
   --color-foreground: var(--color-zinc-900);
@@ -60,7 +60,7 @@
 }
 
 @utility font-body {
-  @apply font-serif text-base/loose font-light;
+  @apply font-serif text-base/loose;
 }
 
 @utility font-caption {

@@ -4,14 +4,12 @@ import type { Metadata, Viewport } from "next";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import { Suspense } from "react";
-import { cn } from "tailwind-variants";
 
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Link } from "@/components/link";
 import { Main } from "@/components/main";
 import { DraftModeToast } from "@/components/sanity/draft-mode-toast";
-import { geistMono, timelessSans, timelessSerif } from "@/config/fonts";
 import { resolveMetadata } from "@/config/metadata";
 import { darkSchemeQuery, lightSchemeQuery, themeColors, themeScript } from "@/config/theme";
 import { identityQuery, navigationQuery } from "@/sanity/groq/documents";
@@ -40,12 +38,7 @@ export default async function FrontendLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en-GB"
       suppressHydrationWarning
-      className={cn(
-        timelessSans.variable,
-        timelessSerif.variable,
-        geistMono.variable,
-        "bg-background text-base antialiased scheme-light dark:scheme-dark",
-      )}
+      className="bg-background text-base antialiased scheme-light dark:scheme-dark"
     >
       <head>{themeScriptElement}</head>
       <body id="top" className="text-foreground font-sans">
